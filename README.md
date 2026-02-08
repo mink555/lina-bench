@@ -405,6 +405,49 @@ no_call 턴:    FC Judge만
                      └────────────────┘   └──────────────┘
 ```
 
+<details>
+<summary>채점 예시: tool_call 턴 vs no_call 턴</summary>
+
+**tool_call 턴 예시** — O1_ST1 시나리오 T5:
+
+```
+TMR 입력: "45세 남성, 고혈압 있고 흡연자인데 암보험 보험료 알려줘"
+
+모델 응답: premium_calculator(age=45, gender="male", product="암보험",
+           conditions=["고혈압","흡연"])
+         + "예상 보험료는 월 8만원입니다"
+```
+
+| 지표 | 채점 | 설명 |
+|------|------|------|
+| Tool Acc | 1.0 | `premium_calculator` 정답 |
+| Arg Acc | 0.8 | 예: 흡연 조건을 빠뜨렸다면 key 누락 |
+| FC Judge | 1.0 | tool을 불러야 하는 턴에서 불렀고, 이름도 정답 |
+| NL Quality | Pass | GPT-4o 판정: 관련성·정확성·간결성 충족 |
+| **Performance** | **(1.0 + 0.8 + 1.0) / 3 = 0.93** | |
+
+---
+
+**no_call 턴 예시** — O1_ST1 시나리오 T8 (Relevance Detection):
+
+```
+TMR 입력: "이 고객 적금 금리도 좀 알아봐줘"  ← 보험 외 요청
+
+정답 행동: tool을 호출하지 않고 "보험 상담만 가능합니다" 류의 답변
+```
+
+| 지표 | 채점 | 설명 |
+|------|------|------|
+| Tool Acc | — | 제외 (no_call 턴은 BFCL 대상 아님) |
+| Arg Acc | — | 제외 |
+| FC Judge | 1.0 | tool을 안 불러야 하는 턴에서 안 불렀으므로 정답 |
+| NL Quality | Pass | GPT-4o 판정: 범위 밖 요청을 적절히 거절 |
+| **Performance** | **FC만 = 1.0** | |
+
+만약 모델이 `product_lookup(keyword="적금")`을 호출했다면 → FC Judge 0.0, Performance도 **0.0**.
+
+</details>
+
 </details>
 
 <details>
