@@ -10,7 +10,7 @@
 > [!IMPORTANT]
 > **qwen3-14b** — 실무 Performance **82%** (5개 모델 중 1위)
 >
-> - Agent 역량 1위: Tool 93%, Arg 80%, FC 96% (@T7 실무 구간)
+> - Agent 역량 1위: Tool ✅ 93%, Arg ⚠️ 80%, FC ✅ 96% (@T7 실무 구간)
 > - 답변 품질 1위: NL Quality 50%로 Agent+답변 겸용 가능
 > - H100 80GB 최적: 14B ~28GB FP16 서빙, 52GB 여유
 > - 성능 붕괴: ~T3까지 85%+ 유지, 이후 점진 하락
@@ -203,7 +203,7 @@ LLM도 동일한 패턴을 보인다는 점이 [Lost in the Middle][lost-middle]
 
 **1위: qwen3-14b** — 실무 Performance **82%**, Agent + 답변 생성 겸용 가능.
 
-개선 우선순위: **No-Call 33%** > **Arg Acc 80%** > Tool Acc 93%
+개선 우선순위: **No-Call ⚠️ 33%** > **Arg Acc ⚠️ 80%** > Tool Acc ✅ 93%
 
 ### Turn-Point 분석 — 붕괴 지점
 
