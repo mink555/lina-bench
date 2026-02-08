@@ -9,7 +9,7 @@ Phase 4: 결과 비교 & 성능 곡선 시각화
     python -m benchmark.compare_results --list               # 저장된 결과 목록
 
 산출물 (benchmark/results/ 에 저장):
-    report_{run_id}.txt                  — 팀장 보고용 텍스트 리포트
+    report_{run_id}.txt                  — 텍스트 리포트
     charts/ (--charts 옵션 시)           — 성능 곡선 차트 7종 (PNG)
 """
 
@@ -867,7 +867,7 @@ def generate_report(
     results: dict,
     save_path: Path,
 ):
-    """팀장 보고용 텍스트 리포트."""
+    """텍스트 리포트."""
     lines: list[str] = []
     w = lines.append
 
