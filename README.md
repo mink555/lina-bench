@@ -209,13 +209,13 @@ LLM도 동일한 패턴을 보인다는 점이 [Lost in the Middle][lost-middle]
 
 | 지표 | @T7 | |
 |------|-----|-|
-| Tool Acc | 93% | ✅ |
+| Tool Acc | 93% | |
 | Arg Acc | 80% | ⚠️ 병목 |
-| FC Judge | 96% | ✅ |
+| FC Judge | 96% | |
 | No-Call | 33% | ⚠️ 병목 |
 | **Performance** | **82%** | |
 
-개선 우선순위: **No-Call ⚠️ 33%** > **Arg Acc ⚠️ 80%** > Tool Acc ✅ 93%
+개선 우선순위: **No-Call 33%** > **Arg Acc 80%** > Tool Acc 93%
 
 ### Turn-Point 분석 — 붕괴 지점
 

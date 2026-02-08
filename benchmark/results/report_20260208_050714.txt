@@ -33,9 +33,9 @@
 
   📌 [1위 모델 실무 구간(@T7) 세부]
     대상: qwen3-14b | 실무 턴: 42턴 (tool_call 36 + no_call 6)
-    Tool Acc    93%  ✅
+    Tool Acc    93%
     Arg Acc     80%  ⚠️ 병목
-    FC Judge    96%  ✅
+    FC Judge    96% 
     No-Call     33%  ⚠️ 병목
     ─────────────────────
     Perf        82%
