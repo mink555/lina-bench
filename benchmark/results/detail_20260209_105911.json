@@ -1,8 +1,8 @@
 {
   "_meta": {
-    "run_id": "20260208_050714",
-    "timestamp": "2026-02-08T05:07:14.030711",
-    "elapsed_seconds": 5355.6,
+    "run_id": "20260209_105911",
+    "timestamp": "2026-02-09T10:59:11.306132",
+    "elapsed_seconds": 3649.7,
     "models": [
       "meta-llama/llama-3.3-70b-instruct",
       "mistralai/mistral-small-3.2-24b-instruct",
@@ -35,7 +35,19 @@
       "O2_ST3": "C006, 47세 남성, 건강보험(POL_H002)"
     },
     "total_turns": 106,
-    "judge_model": "openai/gpt-4o"
+    "judge_model": "openai/gpt-4o",
+    "config": {
+      "generation": {
+        "temperature": 0.0,
+        "seed": 42,
+        "tool_choice": "auto"
+      },
+      "judge": {
+        "temperature": 0.0,
+        "seed": 42,
+        "max_tokens": 200
+      }
+    }
   },
   "results": {
     "meta-llama/llama-3.3-70b-instruct": {
@@ -251,7 +263,7 @@
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
+            "arg_key_acc": 0.8,
             "arg_value_acc": 0.2
           },
           "fc_judgment": {
@@ -315,7 +327,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -397,20 +409,21 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "policy_upsell_checker",
-          "model_tools": [
-            "policy_upsell_checker"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": null
+          "fc_quality": {
+            "pass": false,
+            "reason": "정답 Tool인 policy_upsell_checker를 호출하지 않았고, 구체적인 상품 추천 없이 일반적인 설명만 제공함."
+          }
         },
         {
           "turn_id": "O1_ST1_T18",
@@ -445,7 +458,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.25
+            "arg_value_acc": 0.75
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -468,7 +481,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "arg_value_acc": 0.3333333333333333
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -510,7 +523,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.4
+            "arg_value_acc": 0.6
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -530,7 +543,7 @@
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
-            "arg_key_acc": 0.6666666666666666,
+            "arg_key_acc": 1.0,
             "arg_value_acc": 0.3333333333333333
           },
           "fc_judgment": {
@@ -556,7 +569,7 @@
             "parallel_detected": 0.0,
             "tool_name_acc": 0.5,
             "arg_key_acc": 0.4166666666666667,
-            "arg_value_acc": 0.16666666666666666
+            "arg_value_acc": 0.25
           },
           "fc_judgment": {
             "action_type_acc": 0.0,
@@ -709,8 +722,8 @@
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
-            "arg_key_acc": 0.8,
-            "arg_value_acc": 0.2
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 0.4
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -755,7 +768,7 @@
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
-            "arg_key_acc": 0.6666666666666666,
+            "arg_key_acc": 1.0,
             "arg_value_acc": 0.3333333333333333
           },
           "fc_judgment": {
@@ -772,16 +785,16 @@
           "gt_action": "tool_call",
           "gt_tool": "product_change_calculator",
           "model_tools": [
-            "policy_upsell_checker"
+            "product_change_calculator"
           ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 0.75
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -798,7 +811,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "arg_value_acc": 0.5
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -839,7 +852,7 @@
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
+            "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
@@ -950,7 +963,7 @@
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
-            "arg_key_acc": 0.8,
+            "arg_key_acc": 1.0,
             "arg_value_acc": 0.6
           },
           "fc_judgment": {
@@ -1146,8 +1159,8 @@
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.4
+            "arg_key_acc": 0.8,
+            "arg_value_acc": 0.2
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -1251,16 +1264,16 @@
           "gt_action": "tool_call",
           "gt_tool": "product_comparison",
           "model_tools": [
-            "policy_upsell_checker"
+            "product_comparison"
           ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -1540,13 +1553,13 @@
             "product_comparison"
           ],
           "model_tools": [
-            "product_lookup"
+            "product_comparison"
           ],
           "bfcl": {
             "parallel_detected": 0.0,
             "tool_name_acc": 0.5,
             "arg_key_acc": 0.5,
-            "arg_value_acc": 0.125
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 0.0,
@@ -1567,7 +1580,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "arg_value_acc": 0.75
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -1625,16 +1638,16 @@
           "gt_action": "tool_call",
           "gt_tool": "underwriting_eligibility_checker",
           "model_tools": [
-            "underwriting_eligibility_checker"
+            "underwriting_rules_lookup"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.3333333333333333
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -1868,7 +1881,7 @@
           "gt_action": "relevance_detection",
           "gt_tool": null,
           "model_tools": [
-            "product_lookup"
+            "product_recommender"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -2088,7 +2101,7 @@
           "gt_action": "slot_question",
           "gt_tool": null,
           "model_tools": [
-            "product_lookup"
+            "product_comparison"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -2246,8 +2259,8 @@
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.4
+            "arg_key_acc": 0.8,
+            "arg_value_acc": 0.2
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -2388,7 +2401,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "TMR의 요청은 암보장 상품 조회로, 추가 정보 요청 없이 product_lookup을 호출해야 한다."
+            "reason": "TMR의 요청에 따라 암보장 상품을 조회해야 하며, 추가 정보 요청은 불필요합니다."
           }
         },
         {
@@ -2416,18 +2429,14 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "underwriting_eligibility_checker",
-          "model_tools": [
-            "product_lookup",
-            "underwriting_rules_lookup",
-            "underwriting_eligibility_checker"
-          ],
+          "model_tools": [],
           "bfcl": {
             "tool_name_acc": 0.0,
             "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
+            "action_type_acc": 0.0,
             "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
@@ -2450,10 +2459,7 @@
             "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "TMR의 요청은 'underwriting_rules_lookup' 툴을 호출해야 하는데, AI가 자체적으로 정보를 제공하여 관련성이 부족합니다."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O1_ST1_T05",
@@ -2474,7 +2480,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "누락된 정보 중 2개만 구체적으로 물어보았다.",
+            "reason": "누락된 정보 중 2개만 구체적으로 물어봄.",
             "asked_count": 2
           },
           "gt_missing_params": [
@@ -2504,7 +2510,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "TMR의 요청에 대한 직접적인 답변이 아니며, 추가 정보 요청이 불필요함."
+            "reason": "TMR의 요청은 흡연 여부에 따른 보험료 차이를 묻는 것이므로, 흡연 상태를 다시 물어보는 것은 불필요하다."
           }
         },
         {
@@ -2547,7 +2553,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "보험료 계산에 필요한 추가 정보를 요청하여 관련성이 높고 적절하다."
+            "reason": "보험료 계산에 필요한 추가 정보를 요청하여 관련성이 높다."
           }
         },
         {
@@ -2560,18 +2566,17 @@
             "rider_detail_lookup"
           ],
           "model_tools": [
-            "premium_calculator",
-            "rider_detail_lookup"
+            "smoking_impact_calculator"
           ],
           "bfcl": {
-            "parallel_detected": 1.0,
-            "tool_name_acc": 0.5,
-            "arg_key_acc": 0.5,
-            "arg_value_acc": 0.3333333333333333
+            "parallel_detected": 0.0,
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 0.5,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -2588,7 +2593,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "arg_value_acc": 0.8
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -2603,21 +2608,21 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "rider_detail_lookup",
-          "model_tools": [],
+          "model_tools": [
+            "rider_detail_lookup",
+            "coverage_detail_lookup"
+          ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "정확한 금액 정보 제공 없이 임의로 금액을 제시함."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O1_ST1_T12",
@@ -2646,21 +2651,20 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "special_condition_lookup",
-          "model_tools": [],
+          "model_tools": [
+            "special_condition_lookup"
+          ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "응답이 TMR의 요청과 관련된 정보를 제공하지 않고, 잘못된 정보가 포함되어 있습니다."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O1_ST1_T14",
@@ -2681,7 +2685,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "요청이 tool 범위 밖임을 명시적으로 설명하지 않았습니다."
+            "reason": "tool 범위 밖임을 명시적으로 설명하지 않았음"
           }
         },
         {
@@ -2750,7 +2754,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "정답 Tool인 policy_upsell_checker를 호출하지 않았습니다."
+            "reason": "응답에 policy_upsell_checker tool 호출이 누락됨."
           }
         },
         {
@@ -2785,8 +2789,8 @@
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
-            "arg_key_acc": 0.75,
-            "arg_value_acc": 0.75
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -2803,17 +2807,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
-          "model_tools": [
-            "product_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -2824,17 +2826,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "coverage_detail_lookup",
-          "model_tools": [
-            "coverage_detail_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -2857,8 +2857,8 @@
             "privacy_detection_acc": 1.0
           },
           "fc_quality": {
-            "pass": false,
-            "reason": "TMR의 요청에 따라 즉시 premium_calculator를 호출해야 하는데, 추가 정보를 요청하고 있어 관련성이 부족합니다."
+            "pass": true,
+            "reason": "보험료 계산에 필요한 정보를 요청하여 관련성과 적절성을 충족함."
           }
         },
         {
@@ -2867,17 +2867,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "rider_detail_lookup",
-          "model_tools": [
-            "rider_detail_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -2891,23 +2889,22 @@
             "premium_calculator",
             "waiting_period_lookup"
           ],
-          "model_tools": [
-            "premium_calculator",
-            "waiting_period_lookup",
-            "rider_detail_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "parallel_detected": 1.0,
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 0.9166666666666667,
-            "arg_value_acc": 0.8333333333333333
+            "parallel_detected": 0.0,
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": null
+          "fc_quality": {
+            "pass": false,
+            "reason": "TMR의 요청에 대한 직접적인 보험료와 대기기간 정보를 제공하지 않고 추가 정보를 요구함."
+          }
         },
         {
           "turn_id": "O1_ST2_T06",
@@ -2928,7 +2925,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "누락된 정보 중 1개만 구체적으로 물어봄.",
+            "reason": "누락된 정보 중 건강 상태만 물어보고 나머지 두 가지는 언급하지 않음.",
             "asked_count": 1
           },
           "gt_missing_params": [
@@ -2945,17 +2942,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "underwriting_policy_qa",
-          "model_tools": [
-            "underwriting_policy_qa"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -2966,17 +2961,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "coverage_detail_lookup",
-          "model_tools": [
-            "coverage_detail_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -2987,17 +2980,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_comparison",
-          "model_tools": [
-            "product_comparison"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3008,20 +2999,21 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "rider_recommendation",
-          "model_tools": [
-            "rider_recommendation"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": null
+          "fc_quality": {
+            "pass": false,
+            "reason": "TMR의 요청에 대한 직접적인 특약 추천이 없고, 추가 정보 요청으로 끝나 관련성이 부족함."
+          }
         },
         {
           "turn_id": "O1_ST2_T11",
@@ -3042,7 +3034,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "AI 챗봇이 tool을 호출하지 않았지만, tool 범위 밖임을 설명하지 않고 고객의 ID를 요청하여 정보를 확인하려고 시도함."
+            "reason": "AI 챗봇이 tool을 호출하지 않았지만, 요청이 tool 범위 밖임을 설명하지 않고 고객의 보험을 확인하겠다고 잘못 응답했습니다."
           }
         },
         {
@@ -3051,17 +3043,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "budget_optimizer",
-          "model_tools": [
-            "budget_optimizer"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3075,19 +3065,16 @@
             "coverage_detail_lookup",
             "product_change_calculator"
           ],
-          "model_tools": [
-            "coverage_detail_lookup",
-            "policy_upsell_checker"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "parallel_detected": 1.0,
-            "tool_name_acc": 0.5,
-            "arg_key_acc": 0.5,
-            "arg_value_acc": 0.25
+            "parallel_detected": 0.0,
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 0.5,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3098,20 +3085,21 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "privacy_violation_detector",
-          "model_tools": [
-            "privacy_violation_detector"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.3333333333333333
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
-            "privacy_detection_acc": 1.0
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
+            "privacy_detection_acc": 0.0
           },
-          "fc_quality": null
+          "fc_quality": {
+            "pass": true,
+            "reason": "개인정보 보호 정책에 따라 통화 이력을 확인할 수 없다는 적절한 설명을 제공함."
+          }
         },
         {
           "turn_id": "O1_ST2_T15",
@@ -3119,20 +3107,21 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_change_calculator",
-          "model_tools": [
-            "product_change_calculator"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": null
+          "fc_quality": {
+            "pass": false,
+            "reason": "응답에 성별 정보가 잘못 기재되어 있으며, tool 호출에 필요한 정보가 부족합니다."
+          }
         },
         {
           "turn_id": "O1_ST2_T16",
@@ -3140,20 +3129,21 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "waiting_period_lookup",
-          "model_tools": [
-            "waiting_period_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": null
+          "fc_quality": {
+            "pass": false,
+            "reason": "TMR의 요청에 대한 직접적인 대기기간 정보를 제공하지 않고, 불필요한 추가 정보를 요청하고 있다."
+          }
         },
         {
           "turn_id": "O1_ST2_T17",
@@ -3161,17 +3151,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "policy_upsell_checker",
-          "model_tools": [
-            "policy_upsell_checker"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3182,17 +3170,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "compliance_checker",
-          "model_tools": [
-            "compliance_checker"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3218,7 +3204,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "고객의 건강 상태나 흡연 여부는 product_lookup 호출에 필요하지 않다."
+            "reason": "TMR의 요청은 암보험 상품 조회로, 추가 정보 요청 없이 product_lookup을 호출해야 합니다."
           }
         },
         {
@@ -3259,7 +3245,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "보험료 계산에 필요한 정보를 요청하여 관련성이 높고 적절하다."
+            "reason": "보험료 계산에 필요한 정보를 요청하여 관련성과 적절성을 충족함."
           }
         },
         {
@@ -3322,8 +3308,8 @@
             "privacy_detection_acc": 1.0
           },
           "fc_quality": {
-            "pass": true,
-            "reason": "응답이 TMR의 요청과 관련 있으며, 전자담배가 흡연으로 간주된다는 정확한 정보를 제공하고 있다."
+            "pass": false,
+            "reason": "응답이 TMR의 요청에 맞는 tool을 호출하지 않았습니다."
           }
         },
         {
@@ -3466,7 +3452,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "요청이 tool 범위 밖임을 명확히 설명하고 관련 정보를 제공함."
+            "reason": "요청이 tool 범위 밖임을 설명하고 관련 정보를 제공함."
           }
         },
         {
@@ -3608,7 +3594,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "TMR의 요청은 건강보험 상품 조회로, product_lookup 호출이 필요하다."
+            "reason": "TMR 요청에 따라 product_lookup을 호출해야 하는데, 추가 정보 요청으로 끝나서 관련성이 부족함."
           }
         },
         {
@@ -3630,7 +3616,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "보험료 계산에 필요한 정보를 요청하여 관련성과 적절성을 충족한다."
+            "reason": "보험료 계산에 필요한 정보를 요청하여 관련성과 적절성을 충족함."
           }
         },
         {
@@ -3675,7 +3661,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "TMR의 요청은 당뇨가 있는 고객의 가입 가능 여부를 확인하는 것이므로, 적절한 툴은 underwriting_eligibility_checker이다. AI 응답은 보험료 계산과 관련된 내용으로 관련성이 없다."
+            "reason": "고객의 당뇨 관련 보험 가입 가능 여부를 확인하는 것이 요청의 핵심인데, AI 응답은 보험료 계산에 관한 정보만 요청하고 있어 관련성이 부족하다."
           }
         },
         {
@@ -3716,7 +3702,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "누락된 필수 정보 중 '기존 암보험 외 추가로 원하는 보장'에 대해 구체적으로 묻지 않았음.",
+            "reason": "누락된 필수 정보 중 '기존 암보험 외 추가로 원하는 보장'에 대해 구체적으로 묻지 않았다.",
             "asked_count": 2
           },
           "gt_missing_params": [
@@ -3752,17 +3738,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "underwriting_eligibility_checker",
-          "model_tools": [
-            "underwriting_eligibility_checker"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3773,18 +3757,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "special_condition_lookup",
-          "model_tools": [
-            "special_condition_lookup",
-            "special_condition_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3806,10 +3787,7 @@
             "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "TMR의 요청은 할증을 반영한 보험료 재계산인데, AI는 불필요한 정보를 요청하고 있다."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O2_ST1_T11",
@@ -3817,17 +3795,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "budget_optimizer",
-          "model_tools": [
-            "budget_optimizer"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.8
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3851,7 +3827,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "요청이 tool 범위 밖임을 설명하고 대안을 제공함."
+            "reason": "요청이 tool 범위 밖임을 명확히 설명하고 대안을 제시함."
           }
         },
         {
@@ -3863,19 +3839,16 @@
             "product_lookup",
             "product_comparison"
           ],
-          "model_tools": [
-            "product_recommender",
-            "product_comparison"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "parallel_detected": 1.0,
-            "tool_name_acc": 0.5,
-            "arg_key_acc": 0.5,
+            "parallel_detected": 0.0,
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 0.5,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3886,17 +3859,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_change_calculator",
-          "model_tools": [
-            "product_change_calculator"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.75
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3907,17 +3878,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
-          "model_tools": [
-            "product_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.75
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3928,17 +3897,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "policy_upsell_checker",
-          "model_tools": [
-            "policy_upsell_checker"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3949,17 +3916,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "underwriting_eligibility_checker",
-          "model_tools": [
-            "underwriting_eligibility_checker"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -3985,7 +3950,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "고객의 기본 정보만으로도 product_lookup을 호출할 수 있어야 하며, 추가 정보 요청은 불필요함."
+            "reason": "고객의 건강 상태나 흡연 여부는 product_lookup 호출에 필요하지 않다."
           }
         },
         {
@@ -4048,7 +4013,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "누락된 정보 중 하나인 비교 관점을 구체적으로 물어보지 않았다.",
+            "reason": "누락된 정보 중 하나인 비교 관점에 대해 묻지 않았습니다.",
             "asked_count": 1
           },
           "gt_missing_params": [
@@ -4106,20 +4071,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "customer_policy_lookup",
-          "model_tools": [
-            "customer_policy_lookup",
-            "coverage_detail_lookup",
-            "rider_detail_lookup",
-            "waiting_period_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4141,10 +4101,7 @@
             "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "실손보험의 암 보장 여부를 확인하기 위해 coverage_detail_lookup을 호출해야 하는데, AI가 자체적으로 정보를 제공하여 잘못된 정보일 가능성이 있음."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O2_ST2_T09",
@@ -4165,7 +4122,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "응답이 TMR의 요청과 관련 있으며, 개인정보 보호에 대한 정확한 정보를 제공하고 있다."
+            "reason": "응답이 관련성, 정확성, 간결성, 적절성을 모두 충족함."
           }
         },
         {
@@ -4185,10 +4142,7 @@
             "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "응답이 TMR의 요청과 관련이 있지만, 구체적인 변경 사항이 환각일 가능성이 있어 정확성 기준을 충족하지 못함."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O2_ST2_T11",
@@ -4209,7 +4163,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "tool 범위 밖임을 설명하지 않고, 은퇴 후 생활비 계획에 대한 일반적인 조언만 제공함."
+            "reason": "응답이 tool 범위 밖임을 설명하지 않고 추가 정보를 요청함."
           }
         },
         {
@@ -4218,17 +4172,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_comparison",
-          "model_tools": [
-            "product_comparison"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4256,7 +4208,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "TMR의 요청은 두 상품의 비교와 보험료 차이를 알려달라는 것이며, 추가 정보 요청 없이 tool을 호출해야 합니다."
+            "reason": "TMR의 요청은 두 상품의 비교와 보험료 차이를 알려달라는 것이므로, tool을 호출해야 하는 상황이다."
           }
         },
         {
@@ -4278,7 +4230,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "TMR의 요청은 치아보험 가입 가능 여부에 대한 것이며, product_lookup을 통해 직접 확인해야 한다."
+            "reason": "응답이 TMR의 요청에 대한 직접적인 답변을 제공하지 않고, 추가 정보를 요구하고 있어 부적절함."
           }
         },
         {
@@ -4300,7 +4252,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "TMR의 요청에 대한 직접적인 특약 추천이 없고, 추가 정보 요청만 있어 관련성이 부족함."
+            "reason": "TMR의 요청에 대한 직접적인 추천이 없고, 추가 정보 요청으로 끝나 관련성이 부족함."
           }
         },
         {
@@ -4309,17 +4261,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "policy_upsell_checker",
-          "model_tools": [
-            "policy_upsell_checker"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.3333333333333333
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4332,17 +4282,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
-          "model_tools": [
-            "product_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4353,17 +4301,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "coverage_detail_lookup",
-          "model_tools": [
-            "coverage_detail_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4399,18 +4345,16 @@
             "coverage_detail_lookup",
             "waiting_period_lookup"
           ],
-          "model_tools": [
-            "waiting_period_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
             "parallel_detected": 0.0,
-            "tool_name_acc": 0.5,
-            "arg_key_acc": 0.5,
-            "arg_value_acc": 0.25
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 0.0,
-            "tool_selection_acc": 0.5,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4421,17 +4365,15 @@
           "call_type": "no_call",
           "gt_action": "slot_question",
           "gt_tool": null,
-          "model_tools": [
-            "product_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
             "tool_name_acc": 0.0,
             "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null,
@@ -4449,16 +4391,14 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "underwriting_eligibility_checker",
-          "model_tools": [
-            "product_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
             "tool_name_acc": 0.0,
             "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
+            "action_type_acc": 0.0,
             "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
@@ -4470,17 +4410,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
-          "model_tools": [
-            "product_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4504,7 +4442,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "고객 자녀의 정보 조회는 개인정보 보호 위반이므로 관련성 있고 적절한 응답이다."
+            "reason": "개인정보 보호 정책에 따라 자녀 정보 조회가 불가하다는 적절한 설명을 제공함."
           }
         },
         {
@@ -4513,16 +4451,14 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_comparison",
-          "model_tools": [
-            "customer_policy_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
             "tool_name_acc": 0.0,
             "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
+            "action_type_acc": 0.0,
             "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
@@ -4534,17 +4470,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_recommender",
-          "model_tools": [
-            "product_recommender"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.75
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4568,7 +4502,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "대출 관련 문의가 tool 범위 밖임을 명확히 설명하지 않았습니다."
+            "reason": "tool 범위 밖임을 명확히 설명하지 않았음"
           }
         },
         {
@@ -4577,16 +4511,14 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "budget_optimizer",
-          "model_tools": [
-            "product_recommender"
-          ],
+          "model_tools": [],
           "bfcl": {
             "tool_name_acc": 0.0,
             "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
+            "action_type_acc": 0.0,
             "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
@@ -4601,19 +4533,16 @@
             "coverage_detail_lookup",
             "premium_calculator"
           ],
-          "model_tools": [
-            "coverage_detail_lookup",
-            "premium_calculator"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "parallel_detected": 1.0,
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.3
+            "parallel_detected": 0.0,
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4635,10 +4564,7 @@
             "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "TMR의 요청은 보장 금액을 올려 보험료를 다시 계산해달라는 것이므로, 추가 정보 요청 없이 바로 계산을 시도해야 합니다."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O2_ST3_T15",
@@ -4646,17 +4572,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "customer_policy_lookup",
-          "model_tools": [
-            "customer_policy_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4667,17 +4591,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_change_calculator",
-          "model_tools": [
-            "product_change_calculator"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4688,17 +4610,15 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_comparison",
-          "model_tools": [
-            "product_comparison"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4761,7 +4681,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "arg_value_acc": 0.6666666666666666
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -4873,7 +4793,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5714285714285714
+            "arg_value_acc": 0.7142857142857143
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -4892,17 +4812,17 @@
             "rider_detail_lookup"
           ],
           "model_tools": [
-            "rider_recommendation"
+            "rider_detail_lookup"
           ],
           "bfcl": {
             "parallel_detected": 0.0,
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 0.5,
+            "arg_key_acc": 0.5,
+            "arg_value_acc": 0.3333333333333333
           },
           "fc_judgment": {
             "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 0.5,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -4956,7 +4876,7 @@
           "gt_action": "tool_call",
           "gt_tool": "product_comparison",
           "model_tools": [
-            "coverage_detail_lookup"
+            "privacy_violation_detector"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -4997,21 +4917,20 @@
           "call_type": "no_call",
           "gt_action": "relevance_detection",
           "gt_tool": null,
-          "model_tools": [],
+          "model_tools": [
+            "compliance_checker"
+          ],
           "bfcl": {
             "tool_name_acc": 0.0,
             "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "tool 범위 밖임을 설명하지 않고, tool 호출을 제안함."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O1_ST1_T15",
@@ -5025,7 +4944,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -5252,8 +5171,8 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "누락된 필수 정보 중 1개만 구체적으로 질문함.",
-            "asked_count": 1
+            "reason": "누락된 필수 정보 3개 중 2개만 구체적으로 물어봄.",
+            "asked_count": 2
           },
           "gt_missing_params": [
             "어떤 상품에 대한 인수 심사인지 (상품명/ID)",
@@ -5261,7 +5180,7 @@
             "과거 병력이나 수술 이력"
           ],
           "gt_missing_count": 3,
-          "slot_asked_count": 1
+          "slot_asked_count": 2
         },
         {
           "turn_id": "O1_ST2_T07",
@@ -5489,7 +5408,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "arg_value_acc": 0.3333333333333333
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -5510,7 +5429,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -5686,16 +5605,16 @@
           "gt_action": "tool_call",
           "gt_tool": "premium_calculator",
           "model_tools": [
-            "premium_calculator"
+            "smoking_impact_calculator"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -5803,7 +5722,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "요청이 tool 범위 밖임을 명확히 설명하고, 보험 관련 문의로 안내하여 적절한 대안을 제공함."
+            "reason": "요청이 tool 범위 밖임을 설명하고 대안을 제시함."
           }
         },
         {
@@ -5859,16 +5778,16 @@
           "gt_action": "tool_call",
           "gt_tool": "premium_calculator",
           "model_tools": [
-            "product_recommender"
+            "premium_calculator"
           ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -5885,7 +5804,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -5922,16 +5841,16 @@
           "gt_action": "tool_call",
           "gt_tool": "product_comparison",
           "model_tools": [
-            "product_comparison"
+            "coverage_detail_lookup"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -5944,6 +5863,27 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
+          "model_tools": [
+            "product_lookup"
+          ],
+          "bfcl": {
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 0.6666666666666666
+          },
+          "fc_judgment": {
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 1.0,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality": null
+        },
+        {
+          "turn_id": "O2_ST1_T02",
+          "turn": 2,
+          "call_type": "single",
+          "gt_action": "tool_call",
+          "gt_tool": "premium_calculator",
           "model_tools": [],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -5956,30 +5896,9 @@
             "privacy_detection_acc": 1.0
           },
           "fc_quality": {
-            "pass": false,
-            "reason": "TMR의 요청에 따라 product_lookup을 호출해야 하는데, 추가 정보 요청으로 잘못 대응함."
+            "pass": true,
+            "reason": "보험료 계산에 필요한 정보가 누락되었음을 정확히 지적하고, 추가 정보 요청을 제안하여 관련성과 적절성을 충족함."
           }
-        },
-        {
-          "turn_id": "O2_ST1_T02",
-          "turn": 2,
-          "call_type": "single",
-          "gt_action": "tool_call",
-          "gt_tool": "premium_calculator",
-          "model_tools": [
-            "premium_calculator"
-          ],
-          "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.8
-          },
-          "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
-            "privacy_detection_acc": 1.0
-          },
-          "fc_quality": null
         },
         {
           "turn_id": "O2_ST1_T03",
@@ -6014,16 +5933,16 @@
           "gt_action": "tool_call",
           "gt_tool": "underwriting_eligibility_checker",
           "model_tools": [
-            "underwriting_eligibility_checker"
+            "underwriting_rules_lookup"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -6084,16 +6003,16 @@
           "gt_action": "tool_call",
           "gt_tool": "underwriting_rules_lookup",
           "model_tools": [
-            "underwriting_eligibility_checker"
+            "underwriting_rules_lookup"
           ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 0.5
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -6105,16 +6024,16 @@
           "gt_action": "tool_call",
           "gt_tool": "underwriting_eligibility_checker",
           "model_tools": [
-            "underwriting_rules_lookup"
+            "underwriting_eligibility_checker"
           ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -6168,16 +6087,16 @@
           "gt_action": "tool_call",
           "gt_tool": "budget_optimizer",
           "model_tools": [
-            "product_recommender"
+            "budget_optimizer"
           ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 0.8
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -6201,7 +6120,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "요청이 tool 범위 밖임을 명확히 설명하고 대안을 제시함."
+            "reason": "AI 챗봇이 자동차보험이 tool 범위 밖임을 명확히 설명하고 대안을 제시함."
           }
         },
         {
@@ -6214,18 +6133,18 @@
             "product_comparison"
           ],
           "model_tools": [
-            "product_lookup",
-            "product_comparison"
+            "customer_policy_lookup",
+            "product_recommender"
           ],
           "bfcl": {
             "parallel_detected": 1.0,
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.375
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -6242,7 +6161,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "arg_value_acc": 0.75
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -6258,16 +6177,16 @@
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
           "model_tools": [
-            "product_lookup"
+            "product_recommender"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.75
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -6284,7 +6203,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "arg_value_acc": 0.3333333333333333
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -6300,16 +6219,16 @@
           "gt_action": "tool_call",
           "gt_tool": "underwriting_eligibility_checker",
           "model_tools": [
-            "underwriting_eligibility_checker"
+            "underwriting_rules_lookup"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -6370,7 +6289,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.8
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -6386,7 +6305,7 @@
           "gt_action": "slot_question",
           "gt_tool": null,
           "model_tools": [
-            "product_comparison"
+            "product_lookup"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -6443,7 +6362,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -6543,7 +6462,7 @@
           "gt_action": "relevance_detection",
           "gt_tool": null,
           "model_tools": [
-            "policy_upsell_checker"
+            "product_lookup"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -6588,16 +6507,17 @@
             "premium_calculator"
           ],
           "model_tools": [
-            "product_comparison"
+            "premium_calculator",
+            "premium_calculator"
           ],
           "bfcl": {
-            "parallel_detected": 0.0,
+            "parallel_detected": 1.0,
             "tool_name_acc": 0.5,
             "arg_key_acc": 0.5,
-            "arg_value_acc": 0.25
+            "arg_value_acc": 0.5
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
+            "action_type_acc": 1.0,
             "tool_selection_acc": 0.5,
             "privacy_detection_acc": 1.0
           },
@@ -6610,16 +6530,16 @@
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
           "model_tools": [
-            "underwriting_rules_lookup"
+            "product_lookup"
           ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 0.75,
+            "arg_value_acc": 0.5
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -6855,16 +6775,16 @@
           "gt_action": "tool_call",
           "gt_tool": "product_comparison",
           "model_tools": [
-            "product_comparison"
+            "customer_policy_lookup"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -6908,8 +6828,8 @@
             "privacy_detection_acc": 1.0
           },
           "fc_quality": {
-            "pass": false,
-            "reason": "tool 범위 밖임을 명확히 설명하지 않았고, 대출 관련 요청을 처리할 수 없음을 명시하지 않았다."
+            "pass": true,
+            "reason": "요청이 tool 범위 밖임을 명확히 설명하고 대안을 제시함."
           }
         },
         {
@@ -6943,17 +6863,18 @@
             "premium_calculator"
           ],
           "model_tools": [
-            "coverage_detail_lookup"
+            "coverage_detail_lookup",
+            "premium_calculator"
           ],
           "bfcl": {
-            "parallel_detected": 0.0,
-            "tool_name_acc": 0.5,
-            "arg_key_acc": 0.5,
-            "arg_value_acc": 0.0
+            "parallel_detected": 1.0,
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 0.3
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
-            "tool_selection_acc": 0.5,
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -7012,7 +6933,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.75
+            "arg_value_acc": 0.5
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -7028,16 +6949,17 @@
           "gt_action": "tool_call",
           "gt_tool": "product_comparison",
           "model_tools": [
-            "product_comparison"
+            "coverage_detail_lookup",
+            "coverage_detail_lookup"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -7053,16 +6975,17 @@
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
           "model_tools": [
+            "customer_policy_lookup",
             "product_lookup"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -7137,7 +7060,7 @@
           "gt_action": "slot_question",
           "gt_tool": null,
           "model_tools": [
-            "product_recommender"
+            "policy_upsell_checker"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -7231,17 +7154,17 @@
             "rider_detail_lookup"
           ],
           "model_tools": [
-            "premium_calculator"
+            "rider_detail_lookup"
           ],
           "bfcl": {
             "parallel_detected": 0.0,
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 0.5,
+            "arg_key_acc": 0.5,
+            "arg_value_acc": 0.3333333333333333
           },
           "fc_judgment": {
             "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 0.5,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -7253,16 +7176,16 @@
           "gt_action": "tool_call",
           "gt_tool": "budget_optimizer",
           "model_tools": [
-            "product_recommender"
+            "budget_optimizer"
           ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -7300,7 +7223,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -7316,12 +7239,14 @@
           "gt_action": "tool_call",
           "gt_tool": "special_condition_lookup",
           "model_tools": [
+            "special_condition_lookup",
+            "special_condition_lookup",
             "special_condition_lookup"
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.3333333333333333
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -7337,7 +7262,7 @@
           "gt_action": "relevance_detection",
           "gt_tool": null,
           "model_tools": [
-            "compliance_checker"
+            "privacy_violation_detector"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -7404,7 +7329,7 @@
           "gt_action": "tool_call",
           "gt_tool": "policy_upsell_checker",
           "model_tools": [
-            "product_recommender"
+            "rider_recommendation"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -7556,18 +7481,18 @@
             "waiting_period_lookup"
           ],
           "model_tools": [
-            "rider_detail_lookup",
-            "waiting_period_lookup"
+            "waiting_period_lookup",
+            "premium_calculator"
           ],
           "bfcl": {
             "parallel_detected": 1.0,
-            "tool_name_acc": 0.5,
-            "arg_key_acc": 0.5,
-            "arg_value_acc": 0.25
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 0.9166666666666667,
+            "arg_value_acc": 0.5
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 0.5,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -7690,21 +7615,20 @@
           "call_type": "no_call",
           "gt_action": "relevance_detection",
           "gt_tool": null,
-          "model_tools": [],
+          "model_tools": [
+            "policy_upsell_checker"
+          ],
           "bfcl": {
             "tool_name_acc": 0.0,
             "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "요청이 tool 범위 밖임을 설명하지 않고, 고객의 보험을 정리하는 것처럼 잘못된 정보를 제공함."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O1_ST2_T12",
@@ -7713,16 +7637,16 @@
           "gt_action": "tool_call",
           "gt_tool": "budget_optimizer",
           "model_tools": [
-            "budget_optimizer"
+            "product_recommender"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.8
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -7737,17 +7661,20 @@
             "product_change_calculator"
           ],
           "model_tools": [
+            "customer_policy_lookup",
+            "coverage_detail_lookup",
+            "coverage_detail_lookup",
             "product_comparison"
           ],
           "bfcl": {
-            "parallel_detected": 0.0,
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "parallel_detected": 1.0,
+            "tool_name_acc": 0.5,
+            "arg_key_acc": 0.5,
+            "arg_value_acc": 0.25
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 0.5,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -7780,16 +7707,17 @@
           "gt_action": "tool_call",
           "gt_tool": "product_change_calculator",
           "model_tools": [
+            "product_comparison",
             "product_change_calculator"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.75
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -7806,7 +7734,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -7848,7 +7776,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.0
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -8142,7 +8070,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "요청이 tool 범위 밖임을 적절히 설명하고 대안을 제공함."
+            "reason": "요청이 tool 범위 밖임을 설명하고 적절한 대안을 제공했습니다."
           }
         },
         {
@@ -8176,17 +8104,18 @@
             "rider_recommendation"
           ],
           "model_tools": [
-            "budget_optimizer"
+            "product_recommender",
+            "rider_recommendation"
           ],
           "bfcl": {
-            "parallel_detected": 0.0,
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "parallel_detected": 1.0,
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 0.375
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -8203,7 +8132,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6
+            "arg_value_acc": 0.8
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -8224,7 +8153,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -8283,21 +8212,20 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
-          "model_tools": [],
+          "model_tools": [
+            "product_lookup"
+          ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 0.6666666666666666
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "TMR의 요청은 'product_lookup'을 호출하는 것이며, AI 응답은 추가 정보 요청으로 관련성이 부족함."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O2_ST1_T02",
@@ -8311,7 +8239,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6
+            "arg_value_acc": 0.8
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -8330,8 +8258,8 @@
             "waiting_period_lookup"
           ],
           "model_tools": [
-            "waiting_period_lookup",
-            "coverage_detail_lookup"
+            "coverage_detail_lookup",
+            "waiting_period_lookup"
           ],
           "bfcl": {
             "parallel_detected": 1.0,
@@ -8374,16 +8302,16 @@
           "gt_action": "tool_call",
           "gt_tool": "underwriting_rules_lookup",
           "model_tools": [
-            "underwriting_rules_lookup"
+            "underwriting_policy_qa"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -8395,7 +8323,7 @@
           "gt_action": "slot_question",
           "gt_tool": null,
           "model_tools": [
-            "product_recommender"
+            "product_comparison"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -8423,16 +8351,16 @@
           "gt_action": "tool_call",
           "gt_tool": "underwriting_rules_lookup",
           "model_tools": [
-            "underwriting_rules_lookup"
+            "underwriting_eligibility_checker"
           ],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -8492,7 +8420,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "arg_value_acc": 0.6666666666666666
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -8541,7 +8469,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "요청이 tool 범위 밖임을 명확히 설명하고 대안을 제시함."
+            "reason": "요청이 tool 범위 밖임을 명확히 설명하고 대안을 제공함."
           }
         },
         {
@@ -8597,16 +8525,16 @@
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
           "model_tools": [
-            "underwriting_policy_qa"
+            "product_lookup"
           ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 0.75
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -8644,7 +8572,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "arg_value_acc": 0.3333333333333333
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -8724,17 +8652,15 @@
           "call_type": "no_call",
           "gt_action": "slot_question",
           "gt_tool": null,
-          "model_tools": [
-            "product_lookup"
-          ],
+          "model_tools": [],
           "bfcl": {
             "tool_name_acc": 0.0,
             "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null,
@@ -8755,7 +8681,7 @@
             "rider_detail_lookup"
           ],
           "model_tools": [
-            "product_lookup"
+            "product_comparison"
           ],
           "bfcl": {
             "parallel_detected": 0.0,
@@ -8860,21 +8786,20 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "underwriting_policy_qa",
-          "model_tools": [],
+          "model_tools": [
+            "underwriting_policy_qa"
+          ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "TMR의 요청에 맞는 tool을 호출하지 않았고, 불필요한 설명이 포함되어 있습니다."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O2_ST2_T11",
@@ -8883,7 +8808,7 @@
           "gt_action": "relevance_detection",
           "gt_tool": null,
           "model_tools": [
-            "product_lookup"
+            "product_recommender"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -8951,7 +8876,7 @@
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
           "model_tools": [
-            "underwriting_eligibility_checker"
+            "underwriting_rules_lookup"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -8998,7 +8923,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.3333333333333333
+            "arg_value_acc": 0.6666666666666666
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -9082,18 +9007,17 @@
             "waiting_period_lookup"
           ],
           "model_tools": [
-            "coverage_detail_lookup",
             "waiting_period_lookup"
           ],
           "bfcl": {
-            "parallel_detected": 1.0,
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "parallel_detected": 0.0,
+            "tool_name_acc": 0.5,
+            "arg_key_acc": 0.5,
+            "arg_value_acc": 0.25
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.5,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -9250,7 +9174,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "AI가 tool 범위 밖임을 설명하고 대출 관련 문의는 금융기관에 하라고 안내함."
+            "reason": "요청이 tool 범위 밖임을 설명하고 대안을 제공함."
           }
         },
         {
@@ -9291,7 +9215,7 @@
             "parallel_detected": 1.0,
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.2
+            "arg_value_acc": 0.55
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -9312,7 +9236,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.4
+            "arg_value_acc": 0.6
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -9354,7 +9278,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.5
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -9665,7 +9589,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -9761,7 +9685,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "응답이 지나치게 길고 복잡하여 간결성 기준을 충족하지 못함."
+            "reason": "응답이 TMR의 요청과 관련이 없고, tool 호출에 대한 설명이 부족함."
           }
         },
         {
@@ -9856,20 +9780,21 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "premium_calculator",
-          "model_tools": [
-            "premium_calculator"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.8
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": null
+          "fc_quality": {
+            "pass": false,
+            "reason": "TMR의 요청에 맞는 tool을 호출하지 않았습니다."
+          }
         },
         {
           "turn_id": "O1_ST2_T04",
@@ -9936,8 +9861,8 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "누락된 필수 정보 중 상품에 대한 정보는 구체적으로 물어보지 않았다.",
-            "asked_count": 2
+            "reason": "누락된 필수 정보 중 과거 병력이나 수술 이력에 대해 구체적으로 묻지 않았다.",
+            "asked_count": 1
           },
           "gt_missing_params": [
             "어떤 상품에 대한 인수 심사인지 (상품명/ID)",
@@ -9945,7 +9870,7 @@
             "과거 병력이나 수술 이력"
           ],
           "gt_missing_count": 3,
-          "slot_asked_count": 2
+          "slot_asked_count": 1
         },
         {
           "turn_id": "O1_ST2_T07",
@@ -9980,7 +9905,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 1.0
+            "arg_value_acc": 0.5
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -10050,7 +9975,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "tool 범위 밖임을 설명하지 않고, 고객의 보험 정리를 도와줄 수 있는 것처럼 안내함."
+            "reason": "AI 응답이 tool 범위 밖임을 설명하지 않고, tool 사용을 제안하고 있음."
           }
         },
         {
@@ -10064,8 +9989,8 @@
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
-            "arg_key_acc": 0.8,
-            "arg_value_acc": 0.6
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 0.8
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -10105,20 +10030,21 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "privacy_violation_detector",
-          "model_tools": [
-            "privacy_violation_detector"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
-            "privacy_detection_acc": 1.0
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
+            "privacy_detection_acc": 0.0
           },
-          "fc_quality": null
+          "fc_quality": {
+            "pass": false,
+            "reason": "응답이 TMR의 요청과 관련이 없고, 부적절한 tool을 호출했습니다."
+          }
         },
         {
           "turn_id": "O1_ST2_T15",
@@ -10266,8 +10192,8 @@
             "privacy_detection_acc": 1.0
           },
           "fc_quality": {
-            "pass": true,
-            "reason": "보험료 계산에 필요한 정보를 요청하여 관련성과 적절성을 충족함."
+            "pass": false,
+            "reason": "TMR의 요청에 대한 직접적인 보험료 계산이 이루어지지 않았고, 추가 정보 요청이 부적절함."
           }
         },
         {
@@ -10334,8 +10260,8 @@
             "privacy_detection_acc": 1.0
           },
           "fc_quality": {
-            "pass": false,
-            "reason": "응답이 TMR의 요청에 비해 과도하게 상세하며, tool 호출 맥락에 맞지 않는 부가 설명이 포함되어 있음."
+            "pass": true,
+            "reason": "TMR의 요청에 맞게 전자담배 사용이 흡연으로 간주되는지 명확히 설명하고, 관련 보험 정책을 간결하게 안내함."
           }
         },
         {
@@ -10490,7 +10416,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "요청이 tool 범위 밖임을 설명하고 대안을 제공함."
+            "reason": "요청이 tool 범위 밖임을 설명하고 대안을 제시함."
           }
         },
         {
@@ -10644,7 +10570,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "TMR의 요청은 건강보험 추가에 대한 것이며, 정답 Tool은 product_lookup이지만 AI 응답은 고객의 요구에 대한 추가 정보를 요청하고 있어 관련성이 부족하다."
+            "reason": "TMR 요청에 따라 product_lookup을 호출해야 하는데, 호출 없이 부가 설명만 제공함."
           }
         },
         {
@@ -10758,7 +10684,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "누락된 필수 정보를 구체적으로 질문하지 않고 바로 상품을 추천함.",
+            "reason": "누락된 필수 정보 3개 중 아무것도 구체적으로 물어보지 않았다.",
             "asked_count": 0
           },
           "gt_missing_params": [
@@ -10776,16 +10702,16 @@
           "gt_action": "tool_call",
           "gt_tool": "underwriting_rules_lookup",
           "model_tools": [
-            "underwriting_eligibility_checker"
+            "underwriting_rules_lookup"
           ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
-            "tool_selection_acc": 0.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
           "fc_quality": null
@@ -10796,21 +10722,20 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "underwriting_eligibility_checker",
-          "model_tools": [],
+          "model_tools": [
+            "underwriting_eligibility_checker"
+          ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
-            "arg_value_acc": 0.0
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "응답이 TMR의 요청과 관련이 없고, 잘못된 정보가 포함되어 있습니다."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O2_ST1_T09",
@@ -10894,7 +10819,7 @@
           },
           "fc_quality": {
             "pass": true,
-            "reason": "자동차보험이 tool 범위 밖임을 설명하고 대안을 제시함."
+            "reason": "자동차보험은 라이나생명의 취급 범위 밖임을 명확히 설명하고, 대안으로 손해보험사를 안내하는 적절한 조언을 제공함."
           }
         },
         {
@@ -11171,21 +11096,20 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "coverage_detail_lookup",
-          "model_tools": [],
+          "model_tools": [
+            "coverage_detail_lookup"
+          ],
           "bfcl": {
-            "tool_name_acc": 0.0,
-            "arg_key_acc": 0.0,
+            "tool_name_acc": 1.0,
+            "arg_key_acc": 1.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 0.0,
-            "tool_selection_acc": 0.0,
+            "action_type_acc": 1.0,
+            "tool_selection_acc": 1.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": {
-            "pass": false,
-            "reason": "TMR의 요청은 기존 실손보험의 암 보장 여부 확인인데, AI 응답은 부가적인 보험 상품 추천으로 초점이 맞춰져 있어 관련성이 부족합니다."
-          }
+          "fc_quality": null
         },
         {
           "turn_id": "O2_ST2_T09",
@@ -11198,8 +11122,8 @@
           ],
           "bfcl": {
             "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "arg_key_acc": 0.6666666666666666,
+            "arg_value_acc": 0.3333333333333333
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -11248,7 +11172,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "tool 범위 밖임을 설명하지 않고, 상품 제안에 집중함"
+            "reason": "tool 범위 밖임을 명확히 설명하지 않았고, 대안 제시가 불충분함."
           }
         },
         {
@@ -11282,13 +11206,13 @@
             "premium_calculator"
           ],
           "model_tools": [
-            "premium_calculator"
+            "product_comparison"
           ],
           "bfcl": {
             "parallel_detected": 0.0,
             "tool_name_acc": 0.5,
             "arg_key_acc": 0.5,
-            "arg_value_acc": 0.5
+            "arg_value_acc": 0.25
           },
           "fc_judgment": {
             "action_type_acc": 0.0,
@@ -11304,7 +11228,7 @@
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
           "model_tools": [
-            "underwriting_eligibility_checker"
+            "health_declaration_guide"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -11381,7 +11305,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "Tool 호출 없이 부가 설명만 제공하여 관련성이 부족함."
+            "reason": "TMR의 요청은 종신보험 상품 조회인데, AI 응답은 고객에게 질문을 던지고 있어 관련성이 부족함."
           }
         },
         {
@@ -11471,7 +11395,7 @@
           },
           "fc_quality": {
             "pass": false,
-            "reason": "누락된 필수 정보를 구체적으로 묻지 않고, 기존 보험을 기준으로 추천만 제공함.",
+            "reason": "누락된 필수 정보를 구체적으로 묻지 않고, 특정 상품을 제안함.",
             "asked_count": 0
           },
           "gt_missing_params": [
@@ -11494,7 +11418,7 @@
           "bfcl": {
             "tool_name_acc": 1.0,
             "arg_key_acc": 1.0,
-            "arg_value_acc": 0.6666666666666666
+            "arg_value_acc": 1.0
           },
           "fc_judgment": {
             "action_type_acc": 1.0,
@@ -11510,7 +11434,7 @@
           "gt_action": "tool_call",
           "gt_tool": "product_lookup",
           "model_tools": [
-            "product_recommender"
+            "privacy_violation_detector"
           ],
           "bfcl": {
             "tool_name_acc": 0.0,
@@ -11551,20 +11475,21 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_comparison",
-          "model_tools": [
-            "product_comparison"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": null
+          "fc_quality": {
+            "pass": false,
+            "reason": "TMR의 요청은 두 보험의 겹치는 부분을 확인하는 것이므로, tool 호출이 필요합니다."
+          }
         },
         {
           "turn_id": "O2_ST3_T10",
@@ -11605,8 +11530,8 @@
             "privacy_detection_acc": 1.0
           },
           "fc_quality": {
-            "pass": false,
-            "reason": "AI 응답이 tool 범위 밖임을 설명하지 않고, 대출 가능 여부에 대한 정보를 제공하고 있음."
+            "pass": true,
+            "reason": "요청이 tool 범위 밖임을 설명하고 대안을 제공함."
           }
         },
         {
@@ -11724,20 +11649,21 @@
           "call_type": "single",
           "gt_action": "tool_call",
           "gt_tool": "product_comparison",
-          "model_tools": [
-            "product_comparison"
-          ],
+          "model_tools": [],
           "bfcl": {
-            "tool_name_acc": 1.0,
-            "arg_key_acc": 1.0,
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
             "arg_value_acc": 0.0
           },
           "fc_judgment": {
-            "action_type_acc": 1.0,
-            "tool_selection_acc": 1.0,
+            "action_type_acc": 0.0,
+            "tool_selection_acc": 0.0,
             "privacy_detection_acc": 1.0
           },
-          "fc_quality": null
+          "fc_quality": {
+            "pass": false,
+            "reason": "응답이 TMR의 요청과 관련이 없고, tool 호출 맥락에 맞지 않는 부가 설명이 포함되어 있음."
+          }
         }
       ]
     }
