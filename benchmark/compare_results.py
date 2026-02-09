@@ -819,6 +819,118 @@ def chart_scenario_heatmap(
 # Text Report Generation
 # ═══════════════════════════════════════════════════════════════════
 
+# ═══════════════════════════════════════════════════════════════════
+# Error Taxonomy
+# ═══════════════════════════════════════════════════════════════════
+
+# 6개 에러 태그 정의
+ERROR_TAGS = {
+    "WRONG_TOOL":  "정답은 콜인데 다른 tool 호출",
+    "MISSED_CALL": "정답은 콜인데 미호출",
+    "FALSE_CALL":  "정답은 미콜인데 호출",
+    "ARG_MISSING": "tool 맞지만 필수 인자 누락",
+    "ARG_WRONG":   "tool 맞지만 인자 값 틀림",
+    "ARG_STALE":   "번복값 미갱신 (ST3 추정)",
+}
+
+
+def compute_error_taxonomy(results: dict) -> dict[str, dict[str, int]]:
+    """모델별 에러 유형 분류.
+
+    Returns: {model: {tag: count, ..., "_total": N, "_correct": N}}
+    """
+    output = {}
+    for model, scenarios in results.items():
+        counts = {tag: 0 for tag in ERROR_TAGS}
+        total = 0
+        correct = 0
+
+        for sc_id, turns in scenarios.items():
+            is_st3 = "ST3" in sc_id
+            for t in turns:
+                total += 1
+                ct = t.get("call_type", "single")
+                has_calls = bool(t.get("model_tools")) or (
+                    t["bfcl"]["tool_name_acc"] > 0 or
+                    t["fc_judgment"]["action_type_acc"] == 1.0
+                )
+
+                # model_tools가 없는 경우 fc_judgment로 추론
+                if "model_tools" in t:
+                    has_calls = bool(t["model_tools"])
+                else:
+                    # tool_call 턴: action_type_acc=1 → 호출함
+                    # no_call 턴: action_type_acc=0 → 호출함 (오답)
+                    if ct == "no_call":
+                        has_calls = t["fc_judgment"]["action_type_acc"] == 0.0
+                    else:
+                        has_calls = t["fc_judgment"]["action_type_acc"] == 1.0
+
+                if ct == "no_call":
+                    # 미콜이 정답
+                    if has_calls:
+                        counts["FALSE_CALL"] += 1
+                    else:
+                        correct += 1
+                else:
+                    # 콜이 정답
+                    tool_ok = t["bfcl"]["tool_name_acc"] == 1.0
+                    arg_key_ok = t["bfcl"]["arg_key_acc"] == 1.0
+                    arg_val_ok = t["bfcl"]["arg_value_acc"] == 1.0
+
+                    if not has_calls:
+                        counts["MISSED_CALL"] += 1
+                    elif not tool_ok:
+                        counts["WRONG_TOOL"] += 1
+                    elif not arg_key_ok:
+                        counts["ARG_MISSING"] += 1
+                    elif not arg_val_ok:
+                        if is_st3:
+                            counts["ARG_STALE"] += 1
+                        else:
+                            counts["ARG_WRONG"] += 1
+                    else:
+                        correct += 1
+
+        counts["_total"] = total
+        counts["_correct"] = correct
+        output[model] = counts
+    return output
+
+
+# ═══════════════════════════════════════════════════════════════════
+# Git / Config Helpers
+# ═══════════════════════════════════════════════════════════════════
+
+def _get_git_rev() -> str:
+    """현재 git commit hash (short). 실패 시 'unknown'."""
+    import subprocess
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            capture_output=True, text=True, timeout=5,
+            cwd=str(ROOT),
+        )
+        return result.stdout.strip() if result.returncode == 0 else "unknown"
+    except Exception:
+        return "unknown"
+
+
+def _format_config(meta: dict) -> list[str]:
+    """메타데이터에서 config 정보를 사람이 읽기 좋은 형태로."""
+    cfg = meta.get("config", {})
+    gen = cfg.get("generation", {})
+    jdg = cfg.get("judge", {})
+    lines = []
+    lines.append(f"  seed={gen.get('seed', '?')}  "
+                 f"temp={gen.get('temperature', '?')}  "
+                 f"tool_choice={gen.get('tool_choice', '?')}")
+    lines.append(f"  judge: seed={jdg.get('seed', '?')}  "
+                 f"temp={jdg.get('temperature', '?')}  "
+                 f"max_tokens={jdg.get('max_tokens', '?')}")
+    return lines
+
+
 def _zone(val: float) -> str:
     if val >= THRESHOLD_SAFE:
         return "SAFE"        # 90%+ : 안정
@@ -950,6 +1062,9 @@ def generate_report(
     st_order = sorted(st_avg, key=st_avg.get, reverse=True)
     st_names = {"ST1": "조건누적", "ST2": "맥락희석", "ST3": "교란주입"}
 
+    # ── Error Taxonomy 사전 계산 ──
+    err_tax = compute_error_taxonomy(results)
+
     # ════════════════════════════════════════════════════════════════
     # HEADER
     # ════════════════════════════════════════════════════════════════
@@ -959,6 +1074,15 @@ def generate_report(
     w(f"  생성: {datetime.now().strftime('%Y-%m-%d %H:%M')} | "
       f"턴: {meta.get('total_turns', '?')} × {len(models)}모델 | "
       f"Judge: {meta.get('judge_model', 'N/A')}")
+    git_rev = _get_git_rev()
+    w(f"  commit: {git_rev} | run_id: {meta.get('run_id', '?')}")
+    for cfg_line in _format_config(meta):
+        w(f"  config: {cfg_line}")
+    w("")
+    w(f"  용어 정의:")
+    w(f"    @T7 (실무 구간) = Turn 1~7까지의 누적 성능. TMR 영업콜의")
+    w(f"    실무 턴 수(청약 ~7턴, 보류 ~5턴)에 대응하는 운영 기준선.")
+    w(f"    T7 이후(T10~T19)는 스트레스 테스트 구간으로 내구도 진단용.")
     w("")
 
     # ════════════════════════════════════════════════════════════════
@@ -1347,6 +1471,86 @@ def generate_report(
     w("")
 
     # ════════════════════════════════════════════════════════════════
+    # 4b. Error Taxonomy — 에러 유형 분류
+    # ════════════════════════════════════════════════════════════════
+    w("=" * 78)
+    w("  4b. Error Taxonomy — 에러 유형 분류")
+    w("=" * 78)
+    w("")
+    w("  각 턴의 실패를 6개 태그로 분류하여 '어떤 종류의 실수를 하는가' 진단.")
+    w("  개선 방향: MISSED_CALL/FALSE_CALL → 프롬프트, ARG_* → 슬롯 메모리")
+    w("")
+    w("  태그 정의:")
+    for tag, desc in ERROR_TAGS.items():
+        w(f"    {tag:<14} {desc}")
+    w("")
+
+    # 에러 테이블
+    et_cols = [28, 10, 10, 10, 10, 10, 10, 8]
+    et_sep = "  " + "+".join("-" * c for c in et_cols) + "+"
+    w(et_sep)
+    w(f"  | {'모델':<{et_cols[0]-2}}"
+      f"| {'WRONG':^{et_cols[1]-1}}"
+      f"| {'MISSED':^{et_cols[2]-1}}"
+      f"| {'FALSE':^{et_cols[3]-1}}"
+      f"| {'ARG_MIS':^{et_cols[4]-1}}"
+      f"| {'ARG_WR':^{et_cols[5]-1}}"
+      f"| {'STALE':^{et_cols[6]-1}}"
+      f"| {'OK':^{et_cols[7]-1}}|")
+    w(f"  | {'':^{et_cols[0]-2}}"
+      f"| {'_TOOL':^{et_cols[1]-1}}"
+      f"| {'_CALL':^{et_cols[2]-1}}"
+      f"| {'_CALL':^{et_cols[3]-1}}"
+      f"| {'SING':^{et_cols[4]-1}}"
+      f"| {'ONG':^{et_cols[5]-1}}"
+      f"| {'(ST3)':^{et_cols[6]-1}}"
+      f"| {'':^{et_cols[7]-1}}|")
+    w(et_sep)
+
+    for model in models:
+        d = err_tax[model]
+        short = _short(model)[:et_cols[0]-2]
+        total = d["_total"]
+        ok = d["_correct"]
+        w(f"  | {short:<{et_cols[0]-2}}"
+          f"| {d['WRONG_TOOL']:^{et_cols[1]-1}}"
+          f"| {d['MISSED_CALL']:^{et_cols[2]-1}}"
+          f"| {d['FALSE_CALL']:^{et_cols[3]-1}}"
+          f"| {d['ARG_MISSING']:^{et_cols[4]-1}}"
+          f"| {d['ARG_WRONG']:^{et_cols[5]-1}}"
+          f"| {d['ARG_STALE']:^{et_cols[6]-1}}"
+          f"| {ok:^{et_cols[7]-1}}|")
+    w(et_sep)
+    w("")
+
+    # 모델별 Top-2 에러 태그 + 개선 방향
+    w("  [모델별 Top 에러 + 개선 방향]")
+    tag_fixes = {
+        "WRONG_TOOL": "tool description 정제 / few-shot",
+        "MISSED_CALL": "프롬프트: '정보 있으면 tool 호출' 명시",
+        "FALSE_CALL": "프롬프트: no-call 가이드 + few-shot",
+        "ARG_MISSING": "structured slot tracking",
+        "ARG_WRONG": "slot memory (외부 JSON) 도입",
+        "ARG_STALE": "번복 감지 프롬프트 + state reset 로직",
+    }
+    for model in models:
+        if model in unusable:
+            continue
+        d = err_tax[model]
+        errs = [(tag, d[tag]) for tag in ERROR_TAGS if d[tag] > 0]
+        errs.sort(key=lambda x: x[1], reverse=True)
+        top2 = errs[:2]
+        short = _short(model)
+        if top2:
+            top_str = " > ".join(f"{tag}({cnt})" for tag, cnt in top2)
+            fix = tag_fixes.get(top2[0][0], "")
+            w(f"    {short:<28} {top_str}")
+            w(f"    {'':28} → {fix}")
+        else:
+            w(f"    {short:<28} 에러 없음")
+    w("")
+
+    # ════════════════════════════════════════════════════════════════
     # 5. 모델 프로필 (한 줄 요약)
     # ════════════════════════════════════════════════════════════════
     w("=" * 78)
@@ -1512,6 +1716,185 @@ def generate_report(
     print(f"\n    report: {save_path.name}")
 
 
+def generate_report_md(
+    meta: dict,
+    results: dict,
+    save_path: Path,
+):
+    """GitHub 렌더링용 Markdown 리포트."""
+    lines: list[str] = []
+    w = lines.append
+
+    models = list(results.keys())
+    overall = compute_overall(results)
+    sp = compute_single_parallel(results)
+    cumul_perf = compute_turnpoint_performance(results)
+    err_tax = compute_error_taxonomy(results)
+    cross = compute_stress_cross_analysis(results)
+
+    prod_perf: dict[str, float] = {}
+    for model in models:
+        prod_perf[model] = cumul_perf.get(model, {}).get(PRODUCTION_CUTOFF, 0)
+
+    # safe turns
+    safe_turns: dict[str, int] = {}
+    for model in models:
+        _vals = cumul_perf[model]
+        _d85 = None
+        for _c in TURN_CUTOFFS:
+            _v = _vals.get(_c)
+            if _v is not None and _d85 is None and _v < THRESHOLD_CRITICAL:
+                _d85 = _c
+        if _d85:
+            _idx = TURN_CUTOFFS.index(_d85)
+            safe_turns[model] = TURN_CUTOFFS[_idx - 1] if _idx > 0 else 0
+        else:
+            safe_turns[model] = max(TURN_CUTOFFS)
+
+    usable = [m for m in models if overall[m]["performance"] >= 0.30]
+    git_rev = _get_git_rev()
+
+    # ── Header ──
+    w("# AI TMR Assistant — 모델 성능 비교 리포트")
+    w("")
+    w(f"> 생성: {datetime.now().strftime('%Y-%m-%d %H:%M')} | "
+      f"턴: {meta.get('total_turns', '?')} × {len(models)}모델 | "
+      f"Judge: {meta.get('judge_model', 'N/A')}  ")
+    w(f"> commit: `{git_rev}` | run_id: `{meta.get('run_id', '?')}`  ")
+    for cfg_line in _format_config(meta):
+        w(f"> config:{cfg_line}")
+    w("")
+
+    # ── 용어 정의 ──
+    w("> **@T7 (실무 구간)** = Turn 1~7까지의 누적 성능. TMR 영업콜의 "
+      "실무 턴 수(청약 ~7턴, 보류 ~5턴)에 대응하는 운영 기준선. "
+      "T7 이후(T10~T19)는 스트레스 테스트 구간(내구도 진단용).")
+    w("")
+
+    # ── 1. 성적표 ──
+    w("## 1. 모델별 성적표")
+    w("")
+    w("| 모델 | Tool | Arg | FC | NL | 실무 Perf | 전체 Perf |")
+    w("|------|------|-----|----|----|-----------|-----------|")
+    for model in models:
+        o = overall[model]
+        pp = prod_perf[model]
+        short = _short(model)
+        nl_str = f"{o['nl_quality']:.0%}" if o["nl_quality"] is not None else "N/A"
+        w(f"| {short} | {o['tool']:.1%} | {o['arg']:.1%} | "
+          f"{o['fc']:.1%} | {nl_str} | {pp:.0%} | {o['performance']:.0%} |")
+    w("")
+
+    # ── 2. 능력 해부 ──
+    w("## 2. 능력 해부 — Single / Parallel / No-Call")
+    w("")
+    w("| 모델 | S:Tool | S:Arg | P:Tool | P:Arg | P:감지 | NC:Acc |")
+    w("|------|--------|-------|--------|-------|--------|--------|")
+    for model in models:
+        d = sp[model]
+        w(f"| {_short(model)} | {d['single_tool']:.0%} | {d['single_arg']:.0%} | "
+          f"{d['parallel_tool']:.0%} | {d['parallel_arg']:.0%} | "
+          f"{d['parallel_detect']:.0%} | {d['nc_acc']:.0%} |")
+    w("")
+
+    # ── 3. 성능 곡선 ──
+    w("## 3. 성능 곡선 — Turn-Point Performance")
+    w("")
+    w("🟢 90%+ | 🔵 85%+ | 🟡 75%+ | 🔴 <75%")
+    w("")
+    header = "| 모델 |" + " | ".join(f"~T{c}" for c in TURN_CUTOFFS) + " |"
+    sep_row = "|------|" + " | ".join("---:" for _ in TURN_CUTOFFS) + " |"
+    w(header)
+    w(sep_row)
+    for model in models:
+        row = f"| {_short(model)} |"
+        for c in TURN_CUTOFFS:
+            v = cumul_perf[model].get(c)
+            if v is None:
+                row += " - |"
+            else:
+                row += f" {_zone_dot(v)} |"
+        w(row)
+    w("")
+
+    # ── 4. 스트레스 민감도 ──
+    w("## 4. 스트레스 민감도")
+    w("")
+    w("| 모델 | ST1(조건누적) | ST2(맥락희석) | ST3(교란주입) | 최약점 |")
+    w("|------|-------------|-------------|-------------|--------|")
+    for model in models:
+        if model not in usable:
+            continue
+        d = cross[model]["st_perf"]
+        vals = list(d.values())
+        worst = min(d, key=d.get) if d else "-"
+        st_names_map = {"ST1": "조건누적", "ST2": "맥락희석", "ST3": "교란주입"}
+        w(f"| {_short(model)} | {d.get('ST1', 0):.0%} | {d.get('ST2', 0):.0%} | "
+          f"{d.get('ST3', 0):.0%} | {worst} |")
+    w("")
+
+    # ── 4b. Error Taxonomy ──
+    w("## 4b. Error Taxonomy")
+    w("")
+    w("각 턴의 실패를 6개 태그로 분류.")
+    w("")
+    w("| 태그 | 설명 |")
+    w("|------|------|")
+    for tag, desc in ERROR_TAGS.items():
+        w(f"| `{tag}` | {desc} |")
+    w("")
+
+    w("| 모델 | WRONG_TOOL | MISSED_CALL | FALSE_CALL | ARG_MISSING | ARG_WRONG | ARG_STALE | OK |")
+    w("|------|-----------|------------|-----------|------------|----------|----------|---|")
+    for model in models:
+        d = err_tax[model]
+        ok = d["_correct"]
+        w(f"| {_short(model)} | {d['WRONG_TOOL']} | {d['MISSED_CALL']} | "
+          f"{d['FALSE_CALL']} | {d['ARG_MISSING']} | {d['ARG_WRONG']} | "
+          f"{d['ARG_STALE']} | {ok} |")
+    w("")
+
+    # Top 에러
+    tag_fixes = {
+        "WRONG_TOOL": "tool description 정제",
+        "MISSED_CALL": "프롬프트 보강",
+        "FALSE_CALL": "no-call 가이드 + few-shot",
+        "ARG_MISSING": "structured slot tracking",
+        "ARG_WRONG": "slot memory 도입",
+        "ARG_STALE": "번복 감지 프롬프트",
+    }
+    w("**모델별 Top 에러:**")
+    w("")
+    for model in models:
+        if overall[model]["performance"] < 0.30:
+            continue
+        d = err_tax[model]
+        errs = [(tag, d[tag]) for tag in ERROR_TAGS if d[tag] > 0]
+        errs.sort(key=lambda x: x[1], reverse=True)
+        if errs:
+            top = errs[0]
+            w(f"- **{_short(model)}**: `{top[0]}`({top[1]}) → {tag_fixes.get(top[0], '')}")
+    w("")
+
+    # ── 5. 운영 가이드 ──
+    w("## 5. 운영 가이드")
+    w("")
+    best_model = max(usable, key=lambda m: prod_perf[m]) if usable else models[0]
+    best_pp = prod_perf[best_model]
+    best_safe = safe_turns.get(best_model, 0)
+    w(f"- **권장 모델**: {_short(best_model)} (실무 {best_pp:.0%})")
+    w(f"- **권장 턴 제한**: {PRODUCTION_CUTOFF}턴 이내")
+    w(f"- **85%+ 유지 구간**: ~T{best_safe}")
+    w(f"- 개선 후 벤치마크 재실행으로 Phase별 달성 확인")
+    w("")
+
+    # 저장
+    text = "\n".join(lines)
+    with open(save_path, "w", encoding="utf-8") as f:
+        f.write(text)
+    print(f"    report: {save_path.name}")
+
+
 # ═══════════════════════════════════════════════════════════════════
 # Main
 # ═══════════════════════════════════════════════════════════════════
@@ -1613,10 +1996,13 @@ def main():
 
         print()
 
-    # ── 텍스트 리포트 ──
-    print("  Generating report...")
+    # ── 텍스트 리포트 + Markdown 리포트 ──
+    print("  Generating reports...")
     report_path = RESULTS_DIR / f"report_{run_id}.txt"
     generate_report(meta, results, report_path)
+
+    report_md_path = RESULTS_DIR / f"report_{run_id}.md"
+    generate_report_md(meta, results, report_md_path)
 
 
 if __name__ == "__main__":

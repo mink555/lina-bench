@@ -3,6 +3,16 @@
 폐쇄망 MCP 구축을 위한 오픈소스 LLM 선정 벤치마크.
 5개 모델의 Agent 역량(tool calling 정확도)과 한국어 답변 생성을 106턴 멀티턴 스트레스 테스트로 비교함.
 
+### Quick Start
+
+```bash
+git clone https://github.com/mink555/lina-bench.git && cd lina-bench
+pip install -r requirements.txt
+cp .env.example .env               # OPENROUTER_API_KEY 입력
+python -m benchmark.run_benchmark   # 전체 실행 (seed=42, temp=0.0)
+python -m benchmark.compare_results # 리포트 + 차트 생성
+```
+
 <br>
 
 ## Key Findings
@@ -522,7 +532,8 @@ my_bench/
 │       ├── summary_{run_id}.json     ← 모델별 집계 (기존)
 │       ├── turn_level_{run_id}.jsonl ← 턴별 플랫 레코드
 │       ├── scenario_summary_{run_id}.csv ← 시나리오별 CSV
-│       └── report_{run_id}.txt       ← 텍스트 리포트
+│       ├── report_{run_id}.txt       ← 텍스트 리포트
+│       └── report_{run_id}.md        ← Markdown 리포트 (GitHub 렌더링용)
 └── experiments/                  ← 성능 개선 실험
 ```
 
