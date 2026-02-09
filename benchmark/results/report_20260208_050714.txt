@@ -1,8 +1,8 @@
 ==============================================================================
   AI TMR Assistant — 모델 성능 비교 리포트
 ==============================================================================
-  생성: 2026-02-09 09:35 | 턴: 106 × 5모델 | Judge: openai/gpt-4o
-  commit: 27fe246 | run_id: 20260208_050714
+  생성: 2026-02-09 09:37 | 턴: 106 × 5모델 | Judge: openai/gpt-4o
+  commit: a3c3da8 | run_id: 20260208_050714
   config:   seed=?  temp=?  tool_choice=?
   config:   judge: seed=?  temp=?  max_tokens=?
 
@@ -229,9 +229,9 @@
   개선 방향: MISSED_CALL/FALSE_CALL → 프롬프트, ARG_* → 슬롯 메모리
 
   태그 정의:
-    WRONG_TOOL     정답은 콜인데 다른 tool 호출
-    MISSED_CALL    정답은 콜인데 미호출
-    FALSE_CALL     정답은 미콜인데 호출
+    WRONG_TOOL     호출해야 하는데 다른 tool 호출
+    MISSED_CALL    호출해야 하는데 호출 안 함
+    FALSE_CALL     호출하면 안 되는데 호출
     ARG_MISSING    tool 맞지만 필수 인자 누락
     ARG_WRONG      tool 맞지만 인자 값 틀림
     ARG_STALE      번복값 미갱신 (ST3 추정)
