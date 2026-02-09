@@ -373,18 +373,18 @@ TMR: "이 고객 적금 금리도 좀 알아봐줘"
 #### B. Tool 혼동 → Description 정제
 
 **문제**: 정답이 아닌 유사한 tool을 호출 (WRONG_TOOL 18건).
-예: `rider_detail`을 불러야 하는데 `rider_recommendation`을 부르는 식 — 이름과 설명이 비슷해서 혼동.
+예: `rider_detail_lookup`을 불러야 하는데 `rider_recommendation`을 부르는 식 — 이름과 설명이 비슷해서 혼동.
 
 **조치**: tool 설명문의 역할 구분을 명확히 → 벤치마크 재실행으로 검증.
 A(No-Call 가이드)와 동시 실험 가능.
 
 ```
 # Before — 혼동 유발
-rider_detail:        "특약 상세 정보를 조회합니다"
-rider_recommendation: "특약을 추천합니다"
+rider_detail_lookup:  "특약 상세 조회. 고객이 '진단금 특약 뭐예요?' 물어볼 때."
+rider_recommendation: "특약 추가 추천. 고객이 '뭐 더 추가하면 좋아요?' 물어볼 때."
 
 # After — 역할 구분 명확화
-rider_detail:        "이미 가입된 특약의 보장 내역·한도·면책을 조회합니다 (조회 전용)"
+rider_detail_lookup:  "이미 가입된 특약의 보장 내역·한도·면책을 조회합니다 (조회 전용)"
 rider_recommendation: "고객 니즈에 맞는 미가입 특약을 추천합니다 (추천 전용)"
 ```
 
