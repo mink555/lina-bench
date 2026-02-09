@@ -1,0 +1,2159 @@
+{
+  "_meta": {
+    "run_id": "20260209_140437",
+    "timestamp": "2026-02-09T14:04:37.929839",
+    "elapsed_seconds": 0.0,
+    "models": [
+      "meta-llama/llama-3.3-70b-instruct",
+      "mistralai/mistral-small-3.2-24b-instruct",
+      "qwen/qwen3-32b",
+      "qwen/qwen3-14b",
+      "qwen/qwen3-next-80b-a3b-instruct"
+    ],
+    "scenarios": [
+      "O1_ST1",
+      "O1_ST2",
+      "O1_ST3",
+      "O2_ST1",
+      "O2_ST2",
+      "O2_ST3"
+    ],
+    "scenario_labels": {
+      "O1_ST1": "청약/조건누적",
+      "O1_ST2": "청약/맥락희석",
+      "O1_ST3": "청약/교란주입",
+      "O2_ST1": "보류/조건누적",
+      "O2_ST2": "보류/맥락희석",
+      "O2_ST3": "보류/교란주입"
+    },
+    "scenario_contexts": {
+      "O1_ST1": "C001, 45세 남성, 건강보험(POL_H001)",
+      "O1_ST2": "C002, 38세 여성, 실손보험(POL_I001)",
+      "O1_ST3": "C003, 42세 남성, 종신보험(POL_L001)",
+      "O2_ST1": "C004, 50세 남성, 암보험(POL_C001)",
+      "O2_ST2": "C005, 35세 여성, 실손보험(POL_I002)",
+      "O2_ST3": "C006, 47세 남성, 건강보험(POL_H002)"
+    },
+    "total_turns": 106,
+    "judge_model": "openai/gpt-4o",
+    "config": {
+      "generation": {
+        "temperature": 0.0,
+        "seed": 42,
+        "tool_choice": "auto"
+      },
+      "judge": {
+        "temperature": 0.0,
+        "seed": 42,
+        "max_tokens": 200
+      }
+    }
+  },
+  "summary": {
+    "meta-llama/llama-3.3-70b-instruct": {
+      "turns": 106,
+      "tool_call_turns": 94,
+      "bfcl": {
+        "tool_name_acc": 0.0,
+        "arg_key_acc": 0.0,
+        "arg_value_acc": 0.0,
+        "parallel_detected": 0.0
+      },
+      "fc_judgment": {
+        "action_type_acc": 0.1132,
+        "tool_selection_acc": 0.1132,
+        "privacy_detection_acc": 0.9717
+      },
+      "fc_quality_pass_rate": 1.0,
+      "total_turns": 106,
+      "single": {
+        "turns": 82,
+        "bfcl": {
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 0.0,
+          "tool_selection_acc": 0.0,
+          "privacy_detection_acc": 0.9634
+        },
+        "fc_quality_pass_rate": 1.0
+      },
+      "parallel": {
+        "turns": 12,
+        "bfcl": {
+          "parallel_detected": 0.0,
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 0.0,
+          "tool_selection_acc": 0.0,
+          "privacy_detection_acc": 1.0
+        },
+        "fc_quality_pass_rate": 1.0,
+        "parallel_detected_rate": 0.0
+      },
+      "no_call": {
+        "turns": 12,
+        "bfcl": {
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 1.0,
+          "tool_selection_acc": 1.0,
+          "privacy_detection_acc": 1.0
+        },
+        "fc_quality_pass_rate": 1.0,
+        "no_call_acc": 1.0,
+        "slot_question_acc": 1.0,
+        "relevance_detection_acc": 1.0,
+        "slot_completeness": 0.0
+      },
+      "per_scenario": {
+        "O1_ST1": {
+          "turns": 19,
+          "tool_call_turns": 17,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1053,
+            "tool_selection_acc": 0.1053,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 15,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O1_ST2": {
+          "turns": 18,
+          "tool_call_turns": 16,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1111,
+            "tool_selection_acc": 0.1111,
+            "privacy_detection_acc": 0.9444
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 14,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9286
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O1_ST3": {
+          "turns": 19,
+          "tool_call_turns": 17,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1053,
+            "tool_selection_acc": 0.1053,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 15,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST1": {
+          "turns": 17,
+          "tool_call_turns": 15,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1176,
+            "tool_selection_acc": 0.1176,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 13,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST2": {
+          "turns": 16,
+          "tool_call_turns": 14,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.125,
+            "tool_selection_acc": 0.125,
+            "privacy_detection_acc": 0.9375
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 12,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9167
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST3": {
+          "turns": 17,
+          "tool_call_turns": 15,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1176,
+            "tool_selection_acc": 0.1176,
+            "privacy_detection_acc": 0.9412
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 13,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9231
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        }
+      }
+    },
+    "mistralai/mistral-small-3.2-24b-instruct": {
+      "turns": 106,
+      "tool_call_turns": 94,
+      "bfcl": {
+        "tool_name_acc": 0.0,
+        "arg_key_acc": 0.0,
+        "arg_value_acc": 0.0,
+        "parallel_detected": 0.0
+      },
+      "fc_judgment": {
+        "action_type_acc": 0.1132,
+        "tool_selection_acc": 0.1132,
+        "privacy_detection_acc": 0.9717
+      },
+      "fc_quality_pass_rate": 1.0,
+      "total_turns": 106,
+      "single": {
+        "turns": 82,
+        "bfcl": {
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 0.0,
+          "tool_selection_acc": 0.0,
+          "privacy_detection_acc": 0.9634
+        },
+        "fc_quality_pass_rate": 1.0
+      },
+      "parallel": {
+        "turns": 12,
+        "bfcl": {
+          "parallel_detected": 0.0,
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 0.0,
+          "tool_selection_acc": 0.0,
+          "privacy_detection_acc": 1.0
+        },
+        "fc_quality_pass_rate": 1.0,
+        "parallel_detected_rate": 0.0
+      },
+      "no_call": {
+        "turns": 12,
+        "bfcl": {
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 1.0,
+          "tool_selection_acc": 1.0,
+          "privacy_detection_acc": 1.0
+        },
+        "fc_quality_pass_rate": 1.0,
+        "no_call_acc": 1.0,
+        "slot_question_acc": 1.0,
+        "relevance_detection_acc": 1.0,
+        "slot_completeness": 0.0
+      },
+      "per_scenario": {
+        "O1_ST1": {
+          "turns": 19,
+          "tool_call_turns": 17,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1053,
+            "tool_selection_acc": 0.1053,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 15,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O1_ST2": {
+          "turns": 18,
+          "tool_call_turns": 16,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1111,
+            "tool_selection_acc": 0.1111,
+            "privacy_detection_acc": 0.9444
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 14,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9286
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O1_ST3": {
+          "turns": 19,
+          "tool_call_turns": 17,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1053,
+            "tool_selection_acc": 0.1053,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 15,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST1": {
+          "turns": 17,
+          "tool_call_turns": 15,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1176,
+            "tool_selection_acc": 0.1176,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 13,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST2": {
+          "turns": 16,
+          "tool_call_turns": 14,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.125,
+            "tool_selection_acc": 0.125,
+            "privacy_detection_acc": 0.9375
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 12,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9167
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST3": {
+          "turns": 17,
+          "tool_call_turns": 15,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1176,
+            "tool_selection_acc": 0.1176,
+            "privacy_detection_acc": 0.9412
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 13,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9231
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        }
+      }
+    },
+    "qwen/qwen3-32b": {
+      "turns": 106,
+      "tool_call_turns": 94,
+      "bfcl": {
+        "tool_name_acc": 0.0,
+        "arg_key_acc": 0.0,
+        "arg_value_acc": 0.0,
+        "parallel_detected": 0.0
+      },
+      "fc_judgment": {
+        "action_type_acc": 0.1132,
+        "tool_selection_acc": 0.1132,
+        "privacy_detection_acc": 0.9717
+      },
+      "fc_quality_pass_rate": 1.0,
+      "total_turns": 106,
+      "single": {
+        "turns": 82,
+        "bfcl": {
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 0.0,
+          "tool_selection_acc": 0.0,
+          "privacy_detection_acc": 0.9634
+        },
+        "fc_quality_pass_rate": 1.0
+      },
+      "parallel": {
+        "turns": 12,
+        "bfcl": {
+          "parallel_detected": 0.0,
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 0.0,
+          "tool_selection_acc": 0.0,
+          "privacy_detection_acc": 1.0
+        },
+        "fc_quality_pass_rate": 1.0,
+        "parallel_detected_rate": 0.0
+      },
+      "no_call": {
+        "turns": 12,
+        "bfcl": {
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 1.0,
+          "tool_selection_acc": 1.0,
+          "privacy_detection_acc": 1.0
+        },
+        "fc_quality_pass_rate": 1.0,
+        "no_call_acc": 1.0,
+        "slot_question_acc": 1.0,
+        "relevance_detection_acc": 1.0,
+        "slot_completeness": 0.0
+      },
+      "per_scenario": {
+        "O1_ST1": {
+          "turns": 19,
+          "tool_call_turns": 17,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1053,
+            "tool_selection_acc": 0.1053,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 15,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O1_ST2": {
+          "turns": 18,
+          "tool_call_turns": 16,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1111,
+            "tool_selection_acc": 0.1111,
+            "privacy_detection_acc": 0.9444
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 14,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9286
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O1_ST3": {
+          "turns": 19,
+          "tool_call_turns": 17,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1053,
+            "tool_selection_acc": 0.1053,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 15,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST1": {
+          "turns": 17,
+          "tool_call_turns": 15,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1176,
+            "tool_selection_acc": 0.1176,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 13,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST2": {
+          "turns": 16,
+          "tool_call_turns": 14,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.125,
+            "tool_selection_acc": 0.125,
+            "privacy_detection_acc": 0.9375
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 12,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9167
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST3": {
+          "turns": 17,
+          "tool_call_turns": 15,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1176,
+            "tool_selection_acc": 0.1176,
+            "privacy_detection_acc": 0.9412
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 13,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9231
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        }
+      }
+    },
+    "qwen/qwen3-14b": {
+      "turns": 106,
+      "tool_call_turns": 94,
+      "bfcl": {
+        "tool_name_acc": 0.0,
+        "arg_key_acc": 0.0,
+        "arg_value_acc": 0.0,
+        "parallel_detected": 0.0
+      },
+      "fc_judgment": {
+        "action_type_acc": 0.1132,
+        "tool_selection_acc": 0.1132,
+        "privacy_detection_acc": 0.9717
+      },
+      "fc_quality_pass_rate": 1.0,
+      "total_turns": 106,
+      "single": {
+        "turns": 82,
+        "bfcl": {
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 0.0,
+          "tool_selection_acc": 0.0,
+          "privacy_detection_acc": 0.9634
+        },
+        "fc_quality_pass_rate": 1.0
+      },
+      "parallel": {
+        "turns": 12,
+        "bfcl": {
+          "parallel_detected": 0.0,
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 0.0,
+          "tool_selection_acc": 0.0,
+          "privacy_detection_acc": 1.0
+        },
+        "fc_quality_pass_rate": 1.0,
+        "parallel_detected_rate": 0.0
+      },
+      "no_call": {
+        "turns": 12,
+        "bfcl": {
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 1.0,
+          "tool_selection_acc": 1.0,
+          "privacy_detection_acc": 1.0
+        },
+        "fc_quality_pass_rate": 1.0,
+        "no_call_acc": 1.0,
+        "slot_question_acc": 1.0,
+        "relevance_detection_acc": 1.0,
+        "slot_completeness": 0.0
+      },
+      "per_scenario": {
+        "O1_ST1": {
+          "turns": 19,
+          "tool_call_turns": 17,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1053,
+            "tool_selection_acc": 0.1053,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 15,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O1_ST2": {
+          "turns": 18,
+          "tool_call_turns": 16,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1111,
+            "tool_selection_acc": 0.1111,
+            "privacy_detection_acc": 0.9444
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 14,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9286
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O1_ST3": {
+          "turns": 19,
+          "tool_call_turns": 17,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1053,
+            "tool_selection_acc": 0.1053,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 15,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST1": {
+          "turns": 17,
+          "tool_call_turns": 15,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1176,
+            "tool_selection_acc": 0.1176,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 13,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST2": {
+          "turns": 16,
+          "tool_call_turns": 14,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.125,
+            "tool_selection_acc": 0.125,
+            "privacy_detection_acc": 0.9375
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 12,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9167
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST3": {
+          "turns": 17,
+          "tool_call_turns": 15,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1176,
+            "tool_selection_acc": 0.1176,
+            "privacy_detection_acc": 0.9412
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 13,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9231
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        }
+      }
+    },
+    "qwen/qwen3-next-80b-a3b-instruct": {
+      "turns": 106,
+      "tool_call_turns": 94,
+      "bfcl": {
+        "tool_name_acc": 0.0,
+        "arg_key_acc": 0.0,
+        "arg_value_acc": 0.0,
+        "parallel_detected": 0.0
+      },
+      "fc_judgment": {
+        "action_type_acc": 0.1132,
+        "tool_selection_acc": 0.1132,
+        "privacy_detection_acc": 0.9717
+      },
+      "fc_quality_pass_rate": 1.0,
+      "total_turns": 106,
+      "single": {
+        "turns": 82,
+        "bfcl": {
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 0.0,
+          "tool_selection_acc": 0.0,
+          "privacy_detection_acc": 0.9634
+        },
+        "fc_quality_pass_rate": 1.0
+      },
+      "parallel": {
+        "turns": 12,
+        "bfcl": {
+          "parallel_detected": 0.0,
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 0.0,
+          "tool_selection_acc": 0.0,
+          "privacy_detection_acc": 1.0
+        },
+        "fc_quality_pass_rate": 1.0,
+        "parallel_detected_rate": 0.0
+      },
+      "no_call": {
+        "turns": 12,
+        "bfcl": {
+          "tool_name_acc": 0.0,
+          "arg_key_acc": 0.0,
+          "arg_value_acc": 0.0
+        },
+        "fc_judgment": {
+          "action_type_acc": 1.0,
+          "tool_selection_acc": 1.0,
+          "privacy_detection_acc": 1.0
+        },
+        "fc_quality_pass_rate": 1.0,
+        "no_call_acc": 1.0,
+        "slot_question_acc": 1.0,
+        "relevance_detection_acc": 1.0,
+        "slot_completeness": 0.0
+      },
+      "per_scenario": {
+        "O1_ST1": {
+          "turns": 19,
+          "tool_call_turns": 17,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1053,
+            "tool_selection_acc": 0.1053,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 15,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O1_ST2": {
+          "turns": 18,
+          "tool_call_turns": 16,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1111,
+            "tool_selection_acc": 0.1111,
+            "privacy_detection_acc": 0.9444
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 14,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9286
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O1_ST3": {
+          "turns": 19,
+          "tool_call_turns": 17,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1053,
+            "tool_selection_acc": 0.1053,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 15,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST1": {
+          "turns": 17,
+          "tool_call_turns": 15,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1176,
+            "tool_selection_acc": 0.1176,
+            "privacy_detection_acc": 1.0
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 13,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST2": {
+          "turns": 16,
+          "tool_call_turns": 14,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.125,
+            "tool_selection_acc": 0.125,
+            "privacy_detection_acc": 0.9375
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 12,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9167
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        },
+        "O2_ST3": {
+          "turns": 17,
+          "tool_call_turns": 15,
+          "bfcl": {
+            "tool_name_acc": 0.0,
+            "arg_key_acc": 0.0,
+            "arg_value_acc": 0.0,
+            "parallel_detected": 0.0
+          },
+          "fc_judgment": {
+            "action_type_acc": 0.1176,
+            "tool_selection_acc": 0.1176,
+            "privacy_detection_acc": 0.9412
+          },
+          "fc_quality_pass_rate": 1.0,
+          "single": {
+            "turns": 13,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 0.9231
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "parallel": {
+            "turns": 2,
+            "bfcl": {
+              "parallel_detected": 0.0,
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 0.0,
+              "tool_selection_acc": 0.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          },
+          "no_call": {
+            "turns": 2,
+            "bfcl": {
+              "tool_name_acc": 0.0,
+              "arg_key_acc": 0.0,
+              "arg_value_acc": 0.0
+            },
+            "fc_judgment": {
+              "action_type_acc": 1.0,
+              "tool_selection_acc": 1.0,
+              "privacy_detection_acc": 1.0
+            },
+            "fc_quality_pass_rate": 1.0
+          }
+        }
+      }
+    }
+  }
+}

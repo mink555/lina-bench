@@ -75,6 +75,37 @@ tool calling 정확도를 체계적으로 평가할 수 있는 기존 벤치마�
 - FunctionChat만 사용 시: args 수준의 AST 정밀도 없음, parallel call 평가 빠짐
 - BFCL v4(호출 정밀도 → Tool Acc, Arg Acc) + FunctionChat(행동 판단 → FC Judge, NL Quality)을 결합함
 
+### 2.1 왜 결합 벤치(Lina-bench)가 필요한가
+
+BFCL과 FunctionChat은 각각 중요한 차원을 측정하지만, 단독으로는 **"실무에 투입 가능한가?"** 라는 질문에 답할 수 없음.
+
+| 평가 차원 | [BFCL][bfcl-eval] | [FunctionChat][fc-eval] | **Lina-bench** |
+|-----------|:------------------:|:-----------------------:|:--------------:|
+| Tool name 정확 | ✅ Simple·Multiple | ✅ SingleCall (Call) | ✅ Tool Acc |
+| Args 정확 (AST 매칭) | ✅ AST match | △ Key/Value 일치 | ✅ Arg Acc (AST) |
+| Call / No-Call 판단 | ❌ | ✅ CallDecision · Slot · Relevance | ✅ FC Judge + No-Call |
+| 한국어 답변 품질 | ❌ | ✅ Completion | ✅ NL Quality |
+| Parallel Call | ✅ Parallel · Parallel Multiple | — | ✅ Parallel (12턴) |
+| Multi-turn 기억 | ❌ 싱글턴만 | ⚠️ Dialog (200건, 제한적) | ✅ **19턴 연속 세션** |
+| 스트레스 테스트 (3축) | ❌ | ❌ | ✅ ST1·ST2·ST3 |
+| **실무 완주율 (@T7)** | ❌ | ❌ | **✅ Performance** |
+| **붕괴 지점 진단** | ❌ | ❌ | **✅ Turn-Point 곡선** |
+| **에러 유형 분류** | ❌ | ❌ | **✅ 6-tag Taxonomy** |
+
+핵심 차이:
+
+- **BFCL**은 싱글턴 문법 정확도만 측정함 → "**문법을 맞췄는가?**" (Simple, Multiple, Parallel, Parallel Multiple)
+- **FunctionChat**은 턴별 행동 판단만 측정함 → "**이번 턴에 잘 판단했는가?**" (SingleCall, CallDecision, Dialog)
+- **Lina-bench**는 멀티턴 세션에서 업무 완주까지 측정함 → "**몇 턴까지, 어떤 조건에서, 왜 성능이 떨어지는가?**"
+
+BFCL 1위(94.9%)가 반드시 실무 1위는 아니며, 실제로 벤치마크별 순위가 다름.
+모델 선정의 최종 기준은 실무 조건을 반영한 Lina-bench 결과임.
+
+> 상세 비교 (수치·순위·근거 포함): **[benchmark/README.md](benchmark/README.md)**
+
+[bfcl-eval]: https://github.com/mink555/BFCL-V4-Bench
+[fc-eval]: https://github.com/mink555/KAKAO-FunctionChat-Bench
+
 <details>
 <summary>τ²-bench 제외 사유</summary>
 

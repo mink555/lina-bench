@@ -267,11 +267,17 @@ def get_mock_response(tool_name: str, arguments: dict) -> str:
 # API Calls
 # ═══════════════════════════════════════════════════════════════════
 
+def _api_timeout():
+    """Connect 10s / Read 120s — hanging 방지."""
+    import httpx
+    return httpx.Timeout(connect=10.0, read=120.0, write=10.0, pool=10.0)
+
+
 def create_openrouter_client() -> OpenAI:
     return OpenAI(
         api_key=OPENROUTER_KEY,
         base_url="https://openrouter.ai/api/v1",
-        timeout=60.0,
+        timeout=_api_timeout(),
     )
 
 
@@ -280,7 +286,7 @@ def create_judge_client() -> OpenAI:
     return OpenAI(
         api_key=OPENROUTER_KEY,
         base_url="https://openrouter.ai/api/v1",
-        timeout=60.0,
+        timeout=_api_timeout(),
     )
 
 
