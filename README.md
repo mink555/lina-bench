@@ -95,7 +95,7 @@ BFCL과 FunctionChat은 각각 중요한 차원을 측정하지만, 단독으로
 <details>
 <summary>각 벤치마크의 실제 카테고리 매핑</summary>
 
-| 평가 차원 | BFCL 카테고리 | FunctionChat 카테고리 | Lina-bench 지표 |
+| 평가 차원 | BFCL v4 카테고리 | FunctionChat 카테고리 | Lina-bench 지표 |
 |-----------|--------------|---------------------|----------------|
 | Tool/Args 정확 | Simple · Multiple | SingleCall (Call) | Tool Acc · Arg Acc |
 | Parallel Call | Parallel · Parallel Multiple | — | Parallel (12턴) |
@@ -106,11 +106,11 @@ BFCL과 FunctionChat은 각각 중요한 차원을 측정하지만, 단독으로
 
 </details>
 
-- **BFCL** → "문법을 맞췄는가?" (싱글턴)
+- **BFCL v4** → "문법을 맞췄는가?" (싱글턴)
 - **FunctionChat** → "이번 턴에 잘 판단했는가?" (턴별)
 - **Lina-bench** → "몇 턴까지, 어떤 조건에서, 왜 떨어지는가?" (세션 완주)
 
-BFCL 1위(94.9%)가 반드시 실무 1위는 아니며, 실제로 벤치마크별 순위가 다름.
+BFCL v4 1위(94.9%)가 반드시 실무 1위는 아니며, 실제로 벤치마크별 순위가 다름.
 최종 기준은 실무 조건을 반영한 Lina-bench 결과임 → **[상세 비교](benchmark/README.md)**
 
 [bfcl-eval]: https://github.com/mink555/BFCL-V4-Bench
