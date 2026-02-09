@@ -825,9 +825,9 @@ def chart_scenario_heatmap(
 
 # 6개 에러 태그 정의
 ERROR_TAGS = {
-    "WRONG_TOOL":  "정답은 콜인데 다른 tool 호출",
-    "MISSED_CALL": "정답은 콜인데 미호출",
-    "FALSE_CALL":  "정답은 미콜인데 호출",
+    "WRONG_TOOL":  "호출해야 하는데 다른 tool 호출",
+    "MISSED_CALL": "호출해야 하는데 호출 안 함",
+    "FALSE_CALL":  "호출하면 안 되는데 호출",
     "ARG_MISSING": "tool 맞지만 필수 인자 누락",
     "ARG_WRONG":   "tool 맞지만 인자 값 틀림",
     "ARG_STALE":   "번복값 미갱신 (ST3 추정)",
@@ -867,7 +867,7 @@ def compute_error_taxonomy(results: dict) -> dict[str, dict[str, int]]:
                         has_calls = t["fc_judgment"]["action_type_acc"] == 1.0
 
                 if ct == "no_call":
-                    # 미콜이 정답
+                    # 미호출이 정답
                     if has_calls:
                         counts["FALSE_CALL"] += 1
                     else:
