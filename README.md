@@ -548,6 +548,17 @@ premium_calculator(**slots)
 - no_call 턴은 BFCL 집계에서 완전 제외 — 미호출 판단은 FC Judge가 전담
 - Multi-turn Memory: 후반 GT args에 앞 턴 조건이 모두 포함, 하나라도 잊으면 arg 하락
 
+**Arg Value 비교 규칙** (`deep_compare`, BFCL AST 매칭 기준):
+
+| 비교 유형 | 예시 | 결과 | 설명 |
+|-----------|------|:----:|------|
+| int ↔ float | `45` vs `45.0` | ✅ | 수치 허용 오차 < 1e-9 |
+| 문자열 ↔ 숫자 | `"60000"` vs `60000` | ✅ | BFCL type coercion |
+| list[scalar] 순서 | `["고혈압","흡연"]` vs `["흡연","고혈압"]` | ✅ | 순서 무관 |
+| list[dict] 순서 | `[{a:1},{b:2}]` vs `[{b:2},{a:1}]` | ❌ | 순서 의존 |
+| dict 키 | GT에 없는 추가 키 | — | 무시 (GT 키만 검사) |
+| 의미 동치 | `"남"` vs `"male"` | ❌ | exact match (tool spec에 형식 정의됨) |
+
 ### FC Judge — 행동 판단 (전체 턴)
 
 | Sub-metric | Tool Call 턴 | No-Call 턴 |
