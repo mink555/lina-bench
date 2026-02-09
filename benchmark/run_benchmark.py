@@ -49,19 +49,47 @@ from benchmark.evaluator import (
 # Configuration
 # ═══════════════════════════════════════════════════════════════════
 
+DEFAULT_CONFIG_PATH = ROOT / "configs" / "default.json"
+
+
+def load_config(config_path: Path | None = None) -> dict:
+    """JSON config 파일 로드. 없으면 기본값 사용."""
+    defaults = {
+        "models": [
+            "meta-llama/llama-3.3-70b-instruct",
+            "mistralai/mistral-small-3.2-24b-instruct",
+            "qwen/qwen3-32b",
+            "qwen/qwen3-14b",
+            "qwen/qwen3-next-80b-a3b-instruct",
+        ],
+        "judge_model": "openai/gpt-4o",
+        "generation": {"temperature": 0.0, "seed": 42, "tool_choice": "auto"},
+        "judge": {"temperature": 0.0, "seed": 42, "max_tokens": 200},
+        "retry": {"max_retries": 3, "retry_delay": 2.0, "call_delay": 1.0},
+    }
+    path = config_path or DEFAULT_CONFIG_PATH
+    if path.exists():
+        with open(path, encoding="utf-8") as f:
+            loaded = json.load(f)
+        # shallow merge (loaded 우선)
+        for k, v in loaded.items():
+            if k.startswith("_"):
+                continue
+            if isinstance(v, dict) and k in defaults and isinstance(defaults[k], dict):
+                defaults[k] = {**defaults[k], **v}
+            else:
+                defaults[k] = v
+    return defaults
+
+
+# 글로벌 config — main()에서 덮어쓸 수 있음
+_CFG: dict = {}
+
 OPENROUTER_KEY = os.getenv("OPENROUTER_API_KEY", "")
 
-# 테스트 대상 모델 5개 (OpenRouter)
-MODELS = [
-    "meta-llama/llama-3.3-70b-instruct",
-    "mistralai/mistral-small-3.2-24b-instruct",
-    "qwen/qwen3-32b",
-    "qwen/qwen3-14b",
-    "qwen/qwen3-next-80b-a3b-instruct",
-]
-
-# LLM-as-Judge 모델 (FC_Quality 전용 — OpenRouter 경유)
-JUDGE_MODEL = "openai/gpt-4o"
+# 하위 호환을 위한 모듈 레벨 변수 (config 로드 후 갱신)
+MODELS: list[str] = []
+JUDGE_MODEL: str = "openai/gpt-4o"
 
 # 시나리오별 고객 컨텍스트 (TMR이 통화 전 알고 있는 정보)
 SCENARIO_CONTEXT = {
@@ -96,10 +124,16 @@ TMR(텔레마케터)이 고객 통화 중 필요한 정보를 요청하면, 적�
 6. 정보가 부족하여 tool을 호출할 수 없으면 (상품명, 질환, 예산 등 미제공), tool을 호출하지 말고 TMR에게 필요한 정보를 먼저 물어보세요.
 7. tool로 해결할 수 없는 요청(대화 기술, 감정 대응, 타사/타업종 상품 문의 등)에는 tool을 호출하지 말고 자연어로 답변하세요."""
 
-# API 호출 설정
+# API 호출 설정 (config에서 로드, main()에서 갱신)
 MAX_RETRIES = 3
 RETRY_DELAY = 2.0    # seconds
 CALL_DELAY = 1.0      # calls 사이 대기
+GEN_TEMPERATURE = 0.0
+GEN_SEED: int | None = 42
+GEN_TOOL_CHOICE = "auto"
+JUDGE_TEMPERATURE = 0.0
+JUDGE_SEED: int | None = 42
+JUDGE_MAX_TOKENS = 200
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -266,13 +300,16 @@ def call_model(
 
     for attempt in range(MAX_RETRIES):
         try:
-            resp = client.chat.completions.create(
+            kwargs: dict = dict(
                 model=model,
                 messages=messages,
                 tools=tools,
-                tool_choice="auto",
-                temperature=0.0,
+                tool_choice=GEN_TOOL_CHOICE,
+                temperature=GEN_TEMPERATURE,
             )
+            if GEN_SEED is not None:
+                kwargs["seed"] = GEN_SEED
+            resp = client.chat.completions.create(**kwargs)
             msg = resp.choices[0].message
 
             tool_calls = []
@@ -304,12 +341,15 @@ def call_judge(
     """LLM-as-Judge 호출 → pass/fail."""
     for attempt in range(MAX_RETRIES):
         try:
-            resp = client.chat.completions.create(
+            kwargs: dict = dict(
                 model=JUDGE_MODEL,
                 messages=messages,
-                temperature=0.0,
-                max_tokens=200,
+                temperature=JUDGE_TEMPERATURE,
+                max_tokens=JUDGE_MAX_TOKENS,
             )
+            if JUDGE_SEED is not None:
+                kwargs["seed"] = JUDGE_SEED
+            resp = client.chat.completions.create(**kwargs)
             raw = resp.choices[0].message.content or ""
             return parse_judge_response(raw)
         except Exception as e:
@@ -1282,6 +1322,21 @@ def print_turnpoint_analysis(all_results: dict):
     print()
 
 
+def _turn_performance_static(turn_result: dict) -> float:
+    """턴 하나의 Performance (save_results용 정적 헬퍼).
+
+    tool_call 턴: (Tool + Arg + FC) / 3
+    no_call 턴:   FC Judge만
+    """
+    fcj_vals = list(turn_result["fc_judgment"].values())
+    fc = sum(fcj_vals) / len(fcj_vals) if fcj_vals else 0
+    if turn_result.get("call_type", "single") == "no_call":
+        return fc
+    tool = turn_result["bfcl"]["tool_name_acc"]
+    arg = turn_result["bfcl"]["arg_value_acc"]
+    return (tool + arg + fc) / 3
+
+
 def save_results(
     all_results: dict,
     summary: dict,
@@ -1309,6 +1364,18 @@ def save_results(
             for turns in scenarios.values()
         ) // max(len(all_results), 1),
         "judge_model": JUDGE_MODEL,
+        "config": {
+            "generation": {
+                "temperature": GEN_TEMPERATURE,
+                "seed": GEN_SEED,
+                "tool_choice": GEN_TOOL_CHOICE,
+            },
+            "judge": {
+                "temperature": JUDGE_TEMPERATURE,
+                "seed": JUDGE_SEED,
+                "max_tokens": JUDGE_MAX_TOKENS,
+            },
+        },
     }
 
     # 상세 결과 (per-turn + meta)
@@ -1327,31 +1394,141 @@ def save_results(
     with open(summary_path, "w", encoding="utf-8") as f:
         json.dump(summary_out, f, ensure_ascii=False, indent=2)
 
+    # ── turn_level.jsonl — 턴별 플랫 레코드 ──
+    turn_level_path = out_dir / f"turn_level_{run_id}.jsonl"
+    with open(turn_level_path, "w", encoding="utf-8") as f:
+        for model, scenarios in all_results.items():
+            model_short = model.split("/")[-1]
+            for sc_id, turns in scenarios.items():
+                for t in turns:
+                    record = {
+                        "run_id": run_id,
+                        "model": model_short,
+                        "model_full": model,
+                        "scenario": sc_id,
+                        "turn_id": t["turn_id"],
+                        "turn": t["turn"],
+                        "call_type": t.get("call_type", "single"),
+                        "gt_action": t.get("gt_action", "tool_call"),
+                        "gt_tool": t["gt_tool"],
+                        "model_tools": t.get("model_tools", []),
+                        "tool_name_acc": t["bfcl"]["tool_name_acc"],
+                        "arg_key_acc": t["bfcl"]["arg_key_acc"],
+                        "arg_value_acc": t["bfcl"]["arg_value_acc"],
+                        "fc_action_type_acc": t["fc_judgment"]["action_type_acc"],
+                        "fc_tool_selection_acc": t["fc_judgment"]["tool_selection_acc"],
+                        "fc_privacy_detection_acc": t["fc_judgment"]["privacy_detection_acc"],
+                        "nl_pass": t["fc_quality"]["pass"] if t.get("fc_quality") else None,
+                    }
+                    f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+    # ── scenario_summary.csv — 시나리오별 집계 ──
+    import csv
+    csv_path = out_dir / f"scenario_summary_{run_id}.csv"
+    with open(csv_path, "w", encoding="utf-8", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            "run_id", "model", "scenario", "label",
+            "turns", "tool_call_turns", "no_call_turns",
+            "tool_acc", "arg_key_acc", "arg_value_acc",
+            "fc_action_type", "fc_tool_selection", "fc_privacy",
+            "nl_quality", "performance",
+        ])
+        for model, model_data in summary.items():
+            model_short = model.split("/")[-1]
+            for sc_id, sc_data in model_data.get("per_scenario", {}).items():
+                label = SCENARIO_LABELS.get(sc_id, sc_id)
+                bfcl = sc_data.get("bfcl", {})
+                fcj = sc_data.get("fc_judgment", {})
+                nl = sc_data.get("fc_quality_pass_rate")
+                total_t = sc_data.get("turns", 0)
+                tc_t = sc_data.get("tool_call_turns", 0)
+                nc_t = total_t - tc_t
+
+                # per-scenario Performance 계산
+                sc_turns = all_results[model].get(sc_id, [])
+                perf_vals = [_turn_performance_static(t) for t in sc_turns]
+                perf = sum(perf_vals) / len(perf_vals) if perf_vals else 0
+
+                writer.writerow([
+                    run_id, model_short, sc_id, label,
+                    total_t, tc_t, nc_t,
+                    f"{bfcl.get('tool_name_acc', 0):.4f}",
+                    f"{bfcl.get('arg_key_acc', 0):.4f}",
+                    f"{bfcl.get('arg_value_acc', 0):.4f}",
+                    f"{fcj.get('action_type_acc', 0):.4f}",
+                    f"{fcj.get('tool_selection_acc', 0):.4f}",
+                    f"{fcj.get('privacy_detection_acc', 0):.4f}",
+                    f"{nl:.4f}" if nl is not None else "",
+                    f"{perf:.4f}",
+                ])
+
     print(f"\n  Results saved:")
-    print(f"    Detail : {detail_path}")
-    print(f"    Summary: {summary_path}")
+    print(f"    Detail         : {detail_path}")
+    print(f"    Summary        : {summary_path}")
+    print(f"    Turn-level     : {turn_level_path}")
+    print(f"    Scenario CSV   : {csv_path}")
 
 
 # ═══════════════════════════════════════════════════════════════════
 # Main
 # ═══════════════════════════════════════════════════════════════════
 
+def _apply_config(cfg: dict):
+    """Config dict를 모듈 레벨 변수에 반영."""
+    global MODELS, JUDGE_MODEL
+    global MAX_RETRIES, RETRY_DELAY, CALL_DELAY
+    global GEN_TEMPERATURE, GEN_SEED, GEN_TOOL_CHOICE
+    global JUDGE_TEMPERATURE, JUDGE_SEED, JUDGE_MAX_TOKENS
+    global _CFG
+
+    _CFG = cfg
+    MODELS[:] = cfg["models"]
+    JUDGE_MODEL = cfg["judge_model"]
+
+    gen = cfg.get("generation", {})
+    GEN_TEMPERATURE = gen.get("temperature", 0.0)
+    GEN_SEED = gen.get("seed", 42)
+    GEN_TOOL_CHOICE = gen.get("tool_choice", "auto")
+
+    jdg = cfg.get("judge", {})
+    JUDGE_TEMPERATURE = jdg.get("temperature", 0.0)
+    JUDGE_SEED = jdg.get("seed", 42)
+    JUDGE_MAX_TOKENS = jdg.get("max_tokens", 200)
+
+    ret = cfg.get("retry", {})
+    MAX_RETRIES = ret.get("max_retries", 3)
+    RETRY_DELAY = ret.get("retry_delay", 2.0)
+    CALL_DELAY = ret.get("call_delay", 1.0)
+
+
 def main():
     parser = argparse.ArgumentParser(description="AI TMR Multi-Turn Benchmark")
     parser.add_argument("--dry-run", action="store_true", help="API 호출 없이 구조 검증")
     parser.add_argument("--models", nargs="+", type=int, help="모델 인덱스 (0-based)")
     parser.add_argument("--scenarios", nargs="+", help="특정 시나리오만 (예: O1_ST1 O2_ST3)")
+    parser.add_argument("--config", type=str, default=None,
+                        help="실험 파라미터 JSON (기본: configs/default.json)")
     args = parser.parse_args()
 
+    # Config 로드 & 적용
+    config_path = Path(args.config) if args.config else None
+    cfg = load_config(config_path)
+    _apply_config(cfg)
+
     # 모델 선택
-    selected_models = MODELS
+    selected_models = list(MODELS)
     if args.models:
         selected_models = [MODELS[i] for i in args.models if i < len(MODELS)]
 
     print("=" * 60)
     print("  AI TMR Assistant Multi-Turn Benchmark")
     print("=" * 60)
+    config_display = str(config_path or DEFAULT_CONFIG_PATH)
+    print(f"  Config   : {config_display}")
     print(f"  Models   : {len(selected_models)}")
+    print(f"  Seed     : {GEN_SEED}")
+    print(f"  Temp     : {GEN_TEMPERATURE}")
     print(f"  Dry-run  : {args.dry_run}")
 
     # 데이터 로드

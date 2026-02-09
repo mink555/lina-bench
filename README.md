@@ -502,8 +502,11 @@ TMR 입력: "이 고객 적금 금리도 좀 알아봐줘"  ← 보험 외 요�
 ```
 my_bench/
 ├── README.md
-├── .env                          ← OPENROUTER_API_KEY
+├── .env                          ← OPENROUTER_API_KEY (.env.example 참고)
+├── .env.example                  ← 환경변수 템플릿
 ├── requirements.txt
+├── configs/
+│   └── default.json              ← 실험 파라미터 (seed, temperature 등)
 ├── scenarios/
 │   ├── scenarios_6_multi_turn.jsonl  ← 6개 시나리오 (106턴)
 │   ├── create_sc.py
@@ -515,14 +518,21 @@ my_bench/
 │   ├── run_benchmark.py          ← 벤치마크 실행기
 │   ├── compare_results.py        ← 결과 비교 + 리포트
 │   └── results/
+│       ├── detail_{run_id}.json      ← 전체 턴별 상세 (기존)
+│       ├── summary_{run_id}.json     ← 모델별 집계 (기존)
+│       ├── turn_level_{run_id}.jsonl ← 턴별 플랫 레코드
+│       ├── scenario_summary_{run_id}.csv ← 시나리오별 CSV
+│       └── report_{run_id}.txt       ← 텍스트 리포트
 └── experiments/                  ← 성능 개선 실험
 ```
 
 ### 실행 방법
 
 ```bash
-python -m benchmark.run_benchmark           # 전체 실행
-python -m benchmark.run_benchmark --dry-run # Dry-run
+cp .env.example .env                        # API 키 설정
+python -m benchmark.run_benchmark           # 전체 실행 (configs/default.json 사용)
+python -m benchmark.run_benchmark --dry-run # Dry-run (API 호출 없이 구조 검증)
+python -m benchmark.run_benchmark --config configs/custom.json  # 커스텀 config
 python -m benchmark.compare_results         # 결과 비교 + 리포트
 ```
 
