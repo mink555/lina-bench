@@ -942,12 +942,14 @@ def _zone(val: float) -> str:
 
 
 def _zone_dot(val: float) -> str:
-    """숫자% + 색상 원형 이모지."""
-    if val >= THRESHOLD_SAFE:
+    """숫자% + 색상 원형 이모지.
+    표시 값(반올림)과 이모지가 불일치하지 않도록 반올림 후 판정."""
+    pct = round(val * 100)
+    if pct >= 90:
         return f"{val:>5.0%} 🟢"
-    if val >= THRESHOLD_CRITICAL:
+    if pct >= 85:
         return f"{val:>5.0%} 🔵"
-    if val >= THRESHOLD_WARNING:
+    if pct >= 75:
         return f"{val:>5.0%} 🟡"
     return f"{val:>5.0%} 🔴"
 
@@ -1211,10 +1213,14 @@ def generate_report(
     w(f"  [1위 모델 실무 구간(@T{PRODUCTION_CUTOFF}) 세부]")
     w(f"    대상: {best_m} | 실무 턴: {_bp_total_n}턴 "
       f"(tool_call {_bp_tc_n} + no_call {_bp_nc_n})")
-    w(f"    Tool Acc  {_bp_prod_tool:>5.0%}  ← 이미 우수")
-    w(f"    Arg Acc   {_bp_prod_arg:>5.0%}  ← {'🔴 병목' if _bp_prod_arg < 0.85 else '양호'}")
-    w(f"    FC Judge  {_bp_prod_fc:>5.0%}  ← 이미 우수")
-    w(f"    No-Call   {_bp_prod_nc:>5.0%}  ← {'🔴 병목' if _bp_prod_nc < 0.50 else '양호'}")
+    def _bp_label(v, hi=0.85, lo=0.75):
+        if v >= hi: return "이미 우수"
+        if v >= lo: return "양호"
+        return "🔴 병목"
+    w(f"    Tool Acc  {_bp_prod_tool:>5.0%}  ← {_bp_label(_bp_prod_tool)}")
+    w(f"    Arg Acc   {_bp_prod_arg:>5.0%}  ← {_bp_label(_bp_prod_arg)}")
+    w(f"    FC Judge  {_bp_prod_fc:>5.0%}  ← {_bp_label(_bp_prod_fc)}")
+    w(f"    No-Call   {_bp_prod_nc:>5.0%}  ← {_bp_label(_bp_prod_nc, hi=0.70, lo=0.50)}")
     w(f"    ─────────────────────")
     w(f"    Perf      {best_prod:>5.0%}")
     w(f"    → 개선 우선순위: "
@@ -1295,8 +1301,9 @@ def generate_report(
             else:
                 tendency = "-"
             w(f"    {_short(model):<28} {t_acc:>8.0%} {nc:>7.0%} {tendency:>14}")
-        w(f"    → tool 과잉 모델은 프롬프트로 개선 가능 "
-          f"(few-shot: '정보 부족 시 tool 대신 질문' 예시 추가)")
+        if aggressive:
+            w(f"    → tool 과잉 ({len(aggressive)}개 모델): "
+              f"No-Call 정확도가 낮아 불필요한 tool 호출 발생")
         w("")
 
     # ════════════════════════════════════════════════════════════════
@@ -1344,17 +1351,12 @@ def generate_report(
     for model in models:
         if model in unusable:
             continue
-        # 최종 cutoff 기준 비교 (T19 or 가장 큰 available cutoff)
-        st_finals = {}
-        for st in ("ST1", "ST2", "ST3"):
-            vals = cumul_perf_st[model][st]
-            if vals:
-                last_c = max(vals.keys())
-                st_finals[st] = vals[last_c]
-            else:
-                st_finals[st] = 0.0
-        spread = max(st_finals.values()) - min(st_finals.values()) if st_finals else 0
-        worst = min(st_finals, key=st_finals.get) if st_finals else "-"
+        # cross["st_perf"]를 사용하여 4절과 동일한 소스 보장
+        st_finals = cross[model]["st_perf"]
+        if not st_finals:
+            continue
+        spread = max(st_finals.values()) - min(st_finals.values())
+        worst = min(st_finals, key=st_finals.get)
         w(f"      {_short(model):<28} {st_finals.get('ST1', 0):>5.0%} {st_finals.get('ST2', 0):>5.0%}"
           f" {st_finals.get('ST3', 0):>5.0%} {spread * 100:>5.1f}%p"
           f"  {worst}({st_names.get(worst, '')})")
@@ -1409,7 +1411,6 @@ def generate_report(
                       f" {st_f['ST2']:>5.0%} {st_f['ST3']:>5.0%}")
             w(f"      → tool 과잉 성향은 교란 내성에서 유리하나,")
             w(f"        no_call 정확도를 희생하는 trade-off가 존재한다.")
-            w(f"        프롬프트로 no_call 판별만 보강하면 양쪽 모두 잡을 수 있다.")
             w("")
 
     # 붕괴 순서
@@ -1465,9 +1466,17 @@ def generate_report(
         w(f"    {_short(model):<28} {o1:>8.1%} {o2:>8.1%} {diff * 100:>5.1f}%p")
     w("")
 
-    w(f"  → 치명적: {st_names[st_order[-1]]}({st_order[-1]}) / "
-      f"안전: {st_names[st_order[0]]}({st_order[0]}) / "
-      f"청약 vs 보류 차이: 평균 {avg_outcome_diff*100:.1f}%p(미미)")
+    # 모델별 최약 ST 집계
+    _worst_cnt = defaultdict(int)
+    for m in usable:
+        _d = cross[m]["st_perf"]
+        if _d:
+            _worst_cnt[min(_d, key=_d.get)] += 1
+    _dominant_worst = max(_worst_cnt, key=_worst_cnt.get) if _worst_cnt else st_order[-1]
+    w(f"  → 가장 치명적: {st_names[_dominant_worst]}({_dominant_worst}) "
+      f"— usable {len(usable)}개 모델 중 {_worst_cnt[_dominant_worst]}개가 최약")
+    w(f"    청약 vs 보류 차이: 평균 {avg_outcome_diff*100:.1f}%p(미미) "
+      f"→ 변별력은 스트레스 유형(ST1/ST2/ST3)에 있음")
     w("")
 
     # ════════════════════════════════════════════════════════════════
@@ -1478,7 +1487,7 @@ def generate_report(
     w("=" * 78)
     w("")
     w("  각 턴의 실패를 6개 태그로 분류하여 '어떤 종류의 실수를 하는가' 진단.")
-    w("  개선 방향: MISSED_CALL/FALSE_CALL → 프롬프트, ARG_* → 슬롯 메모리")
+    w("  개선 방향: 각 에러 유형의 Top 태그를 우선 개선.")
     w("")
     w("  태그 정의:")
     for tag, desc in ERROR_TAGS.items():
@@ -1526,12 +1535,12 @@ def generate_report(
     # 모델별 Top-2 에러 태그 + 개선 방향
     w("  [모델별 Top 에러 + 개선 방향]")
     tag_fixes = {
-        "WRONG_TOOL": "tool description 정제 / few-shot",
-        "MISSED_CALL": "프롬프트: '정보 있으면 tool 호출' 명시",
-        "FALSE_CALL": "프롬프트: no-call 가이드 + few-shot",
-        "ARG_MISSING": "structured slot tracking",
-        "ARG_WRONG": "slot memory (외부 JSON) 도입",
-        "ARG_STALE": "번복 감지 프롬프트 + state reset 로직",
+        "WRONG_TOOL": "tool description 개선 또는 tool 선택 정확도 향상",
+        "MISSED_CALL": "호출 판단 기준 강화",
+        "FALSE_CALL": "No-Call 판별 정확도 향상",
+        "ARG_MISSING": "필수 인자 채움 로직 보강",
+        "ARG_WRONG": "인자 값 정확도 향상",
+        "ARG_STALE": "대화 상태 추적/갱신 보강",
     }
     for model in models:
         if model in unusable:
@@ -1550,84 +1559,163 @@ def generate_report(
             w(f"    {short:<28} 에러 없음")
     w("")
 
+    # ── 1위 모델 에러 인사이트 ──
+    _best_err = err_tax[best_perf_model]
+    _best_total = _best_err["_total"]
+    _best_ok = _best_err["_correct"]
+    _best_arg_total = _best_err["ARG_WRONG"] + _best_err["ARG_STALE"]
+    _best_errs = [(tag, _best_err[tag]) for tag in ERROR_TAGS if _best_err[tag] > 0]
+    _best_errs.sort(key=lambda x: x[1], reverse=True)
+
+    w(f"  [1위 모델({_short(best_perf_model)}) 에러 인사이트]")
+    w(f"    전체 {_best_total}턴 중 완벽 정답 {_best_ok}턴 ({_best_ok/_best_total:.0%})")
+    w("")
+    w(f"    ● 핵심 약점 — 인자 오류 {_best_arg_total}건 ({_best_arg_total/_best_total:.0%})")
+    w(f"      ARG_WRONG({_best_err['ARG_WRONG']}) + ARG_STALE({_best_err['ARG_STALE']}):")
+    w(f"      tool은 맞게 골랐지만 인자 값을 틀림.")
+    if _best_err["ARG_STALE"] > 0:
+        w(f"      특히 STALE {_best_err['ARG_STALE']}건은 고객이 값을 번복한 뒤")
+        w(f"      이전 값을 갱신하지 못한 실수 → 대화 상태 추적 실패.")
+    w("")
+    if _best_err["WRONG_TOOL"] > 0:
+        w(f"    ● tool 혼동 — WRONG_TOOL {_best_err['WRONG_TOOL']}건")
+        w(f"      정답과 유사한 다른 tool을 호출하는 실수.")
+        w("")
+    if _best_err["FALSE_CALL"] > 0:
+        w(f"    ● No-Call 실패 — FALSE_CALL {_best_err['FALSE_CALL']}건")
+        w(f"      정보 부족/범위 밖 상황에서 tool을 호출해버림.")
+        w("")
+    if _best_err["MISSED_CALL"] == 0:
+        w(f"    ● 강점 — MISSED_CALL 0건")
+        w(f"      호출해야 할 때 빠뜨리는 일은 한 번도 없음.")
+        w(f"      tool을 적극적으로 부르는 성향이 교란(ST3) 내성의 원인.")
+        w("")
+    # 한 줄 요약 — top 에러 기반 동적 생성
+    _top_err = _best_errs[0] if _best_errs else None
+    if _top_err:
+        _err_to_lever = {
+            "ARG_WRONG": "Arg Acc", "ARG_STALE": "Arg Acc",
+            "ARG_MISSING": "Arg Acc", "WRONG_TOOL": "Tool Acc",
+            "MISSED_CALL": "Tool Acc", "FALSE_CALL": "No-Call",
+        }
+        _lever = _err_to_lever.get(_top_err[0], _top_err[0])
+        w(f"    한 줄 요약: 최다 에러는 {_top_err[0]}({_top_err[1]}건) → {_lever} 개선이 최우선.")
+    w("")
+
     # ════════════════════════════════════════════════════════════════
-    # 5. 모델 프로필 (한 줄 요약)
+    # 5. 모델별 판정 (자연어)
     # ════════════════════════════════════════════════════════════════
     w("=" * 78)
-    w("  5. 모델 한 줄 프로필")
+    w("  5. 모델별 판정")
     w("=" * 78)
     w("")
 
-    w(f"  ※ 실무(@T{PRODUCTION_CUTOFF}) = 실제 콜 분량 기준 | "
-      f"전체(@T{max(TURN_CUTOFFS)}) = 스트레스 포함 전 구간")
-    w("")
-    for model in models:
+    # 순위 정렬 (usable → prod_perf 내림차순, unusable은 끝)
+    _ranked = sorted(usable, key=lambda m: prod_perf[m], reverse=True)
+    _ranked += [m for m in models if m in unusable]
+
+    for rank_idx, model in enumerate(_ranked):
         short = _short(model)
         o = overall[model]
         d = sp[model]
         pp = prod_perf[model]
         safe_t = safe_turns[model]
+        e = err_tax[model]
 
-        # Role
         if model in unusable:
-            role = "❌"
-        elif model == best_perf_model:
-            role = "🏆"
-        elif safe_t >= max(safe_turns[m] for m in usable):
-            role = "⏳"
+            # ── 사용 불가 모델 ──
+            w(f"  ❌ {short} — 사용 불가 (실무 {pp:.0%})")
+            # 왜 사용 불가인지
+            if o["tool"] < 0.15:
+                w(f"    tool 호출 자체를 거의 못 함 (Tool {o['tool']:.0%}).")
+                if d["nc_acc"] >= 0.90:
+                    w(f"    No-Call {d['nc_acc']:.0%}는 tool을 못 불러서 높은 것이지,")
+                    w(f"    판단이 좋은 게 아님.")
+            else:
+                w(f"    전체 Performance {o['performance']:.0%}로 실무 투입 기준 미달.")
+            w("")
+            continue
+
+        # ── 판정 라벨 ──
+        if model == best_perf_model:
+            label = "권장"
+            icon = "🏆"
+        elif rank_idx == 1:
+            label = "차선"
+            icon = "  "
+        elif pp >= 0.70:
+            label = "조건부 사용"
+            icon = "  "
         else:
-            role = "  "
+            label = "비권장"
+            icon = "  "
 
-        # 강약 한 줄
-        tags = []
-        if o["tool"] - o["arg"] > 0.25:
-            tags.append(f"인자기억↓({(o['tool']-o['arg'])*100:.0f}%p)")
-        if d["parallel_detect"] == 0 and o["performance"] > 0.30:
-            tags.append("복수호출 못함")
-        if d["nc_acc"] < 0.50 and o["performance"] > 0.30:
-            tags.append("No-Call 취약")
-        if d["nc_acc"] >= 0.80 and o["tool"] < 0.50:
-            tags.append("NC높지만 tool자체 약함")
-        tag_str = " | ".join(tags) if tags else "균형"
+        w(f"  {icon} {short} — {label} (실무 {pp:.0%})")
 
-        safe_t_str = f"~T{safe_t}" if safe_t > 0 else "T3 미만"
-        gap = pp - o["performance"]
-        w(f"  {role} {short:<28} "
-          f"실무 {pp:.0%} → 전체 {o['performance']:.0%} ({gap:+.0%}p)  "
-          f"85%+: {safe_t_str}")
-        w(f"     Tool {o['tool']:.0%}  Arg {o['arg']:.0%}  FC {o['fc']:.0%}")
-        w(f"     → {tag_str}")
-    w("")
+        # ── 강점 ──
+        strengths = []
+        if model == best_perf_model:
+            strengths.append(f"실무 {pp:.0%}로 1위")
+        if e["MISSED_CALL"] == 0 and o["performance"] >= 0.50:
+            strengths.append("호출 누락 0건 — tool을 적극적으로 부름")
+        nl_q = o.get("nl_quality")
+        if nl_q is not None and nl_q >= 0.80:
+            strengths.append(f"NL {nl_q:.0%}로 답변 품질 우수 → Agent+답변 겸용 가능")
+        if d["nc_acc"] >= 0.70:
+            strengths.append(f"No-Call {d['nc_acc']:.0%}로 상황 판단이 정확 (균형형)")
+
+        # ── 약점 ──
+        weaknesses = []
+        arg_err = e["ARG_WRONG"] + e["ARG_STALE"]
+        if arg_err >= 15:
+            stale_note = f"(번복 미갱신 {e['ARG_STALE']}건 포함)" if e["ARG_STALE"] > 5 else ""
+            weaknesses.append(f"인자 오류 {arg_err}건{stale_note} — 값을 채우는 정밀도 부족")
+        if e["WRONG_TOOL"] >= 15:
+            weaknesses.append(f"tool 혼동 {e['WRONG_TOOL']}건 — 유사 tool 간 구분 실패")
+        if d["nc_acc"] < 0.50 and o["tool"] >= 0.70:
+            weaknesses.append(f"No-Call {d['nc_acc']:.0%} — 불러야/말아야 판단 부족 (tool 과잉)")
+        if o["tool"] - o["arg"] > 0.35:
+            weaknesses.append(f"Tool {o['tool']:.0%} vs Arg {o['arg']:.0%} — tool은 맞추지만 인자를 절반 이상 틀림")
+        if d["parallel_detect"] == 0 and o["performance"] >= 0.50:
+            weaknesses.append("복수호출 인식 0%")
+
+        # ── 스트레스 약점 ──
+        _st_d = cross[model]["st_perf"]
+        if _st_d:
+            _st_worst = min(_st_d, key=_st_d.get)
+            _st_best = max(_st_d, key=_st_d.get)
+            _st_spread = _st_d[_st_best] - _st_d[_st_worst]
+            if _st_spread > 0.10:
+                weaknesses.append(
+                    f"{st_names[_st_worst]}({_st_worst})에 약함 "
+                    f"({_st_d[_st_worst]:.0%}, 최강 {st_names[_st_best]} {_st_d[_st_best]:.0%}과 "
+                    f"{_st_spread*100:.0f}%p 차이)")
+
+        # ── 출력 ──
+        if strengths:
+            for s in strengths:
+                w(f"    + {s}")
+        if weaknesses:
+            for wk in weaknesses:
+                w(f"    - {wk}")
+
+        # ── 비권장 사유 ──
+        if label == "비권장":
+            w(f"    → 실무 투입 시 리스크가 높음.")
+
+        w("")
 
     # ════════════════════════════════════════════════════════════════
-    # 6. 결론 & 개선 로드맵
+    # 6. 결론
     # ════════════════════════════════════════════════════════════════
     w("=" * 78)
-    w("  6. 결론 & 개선 로드맵")
+    w("  6. 결론")
     w("=" * 78)
     w("")
 
     best_pp = prod_perf[best_perf_model]
     best_fp = overall[best_perf_model]["performance"]
     par_best = max(sp[m]["parallel_detect"] for m in models) if models else 0
-
-    # ── 모델 선정 ──
-    w(f"  [모델 선정]")
-    if same_model:
-        w(f"    → 1모델 권장: {_short(best_perf_model)}")
-        nl_q = overall[best_perf_model].get('nl_quality')
-        nl_str = f"NL {nl_q:.0%}" if nl_q is not None else "NL N/A"
-        w(f"      실무 {best_pp:.0%} | {nl_str} | Agent+답변 겸용 가능")
-    elif best_nl_model:
-        w(f"    Agent: {_short(best_perf_model)} (실무 {best_pp:.0%})")
-        w(f"    답변:  {_short(best_nl_model)} "
-          f"(NL {overall[best_nl_model]['nl_quality']:.0%})")
-        perf_diff = abs(best_fp - overall[best_nl_model]["performance"])
-        if perf_diff <= 0.05 and best_nl_model in usable:
-            w(f"    ※ Perf 차이 {perf_diff*100:.1f}%p → 1모델 통합도 가능")
-    else:
-        w(f"    Agent: {_short(best_perf_model)} (실무 {best_pp:.0%})")
-    w("")
 
     # ── 현재 위치 ──
     w(f"  [현재 위치 — {_short(best_perf_model)} @T{PRODUCTION_CUTOFF}]")
@@ -1659,50 +1747,18 @@ def generate_report(
         w(f"    {name:<12} {cur:>5.0%} {headroom_str:>8}"
           f" {s_per10*100:>+6.1f}%p {max_gain*100:>+8.1f}%p {prio:>8}")
     w(f"    민감도=+10%p당 Perf 변화 | 최대 효과=여유분 전부 개선 시 Perf 변화")
-    w(f"    → Arg Acc와 No-Call이 가장 효과적인 개선 레버")
-    w("")
-
-    # ── 단계별 로드맵 ──
-    w(f"  [개선 로드맵 — {best_pp:.0%} → 90%+]")
-    w("")
-
-    # Phase 1: 85%
-    target_85_nc = 0.56 if _bp_prod_nc < 0.50 else _bp_prod_nc
-    w(f"    Phase 1 → 85% (Quick Win, 1~2주)")
-    w(f"    ┌──────────────────────────────────────────────────────┐")
-    w(f"    │  No-Call {_bp_prod_nc:.0%} → {target_85_nc:.0%}                             │")
-    w(f"    │  방법: 시스템 프롬프트에 no-call 가이드 추가           │")
-    w(f"    │  '필수 정보가 부족하면 tool 대신 고객에게 질문하세요'   │")
-    w(f"    │  + slot_question few-shot 2~3개                       │")
-    w(f"    └──────────────────────────────────────────────────────┘")
-    w("")
-
-    # Phase 2: 90%
-    w(f"    Phase 2 → 90% (Prompt Engineering, 2~4주)")
-    w(f"    ┌──────────────────────────────────────────────────────┐")
-    w(f"    │  Arg Acc {_bp_prod_arg:.0%} → 90%+                              │")
-    w(f"    │  방법: structured slot tracking 프롬프트 도입          │")
-    w(f"    │  '고객 정보를 JSON으로 누적 추적하고, tool 호출 시      │")
-    w(f"    │   반드시 해당 JSON에서 인자를 채워 넣으세요'            │")
-    w(f"    │  + No-Call {target_85_nc:.0%} → 80%+ (few-shot 보강)              │")
-    w(f"    └──────────────────────────────────────────────────────┘")
-    w("")
-
-    # Phase 3: 95%
-    w(f"    Phase 3 → 95% (고도화)")
-    w(f"    ┌──────────────────────────────────────────────────────┐")
-    w(f"    │  Arg Acc → 95%+ (Chain-of-Thought 인자 검증 단계)     │")
-    w(f"    │  No-Call → 90%+ (경계 케이스 few-shot 확대)           │")
-    w(f"    │  Parallel → 순차 분리 호출로 전환 (현재 인식률 {par_best:.0%})  │")
-    w(f"    │  ※ 95%는 프롬프트만으로 한계 → fine-tune 검토 필요     │")
-    w(f"    └──────────────────────────────────────────────────────┘")
+    # top-2 레버를 최대 효과 기준으로 동적 선택
+    _sens_ranked = sorted(sens, key=lambda x: x[2] * (x[3] / 0.10) if x[3] > 0 else 0, reverse=True)
+    _top_levers = [s[0] for s in _sens_ranked[:2] if s[3] > 0]
+    if _top_levers:
+        w(f"    → {'와 '.join(_top_levers)}이 가장 효과적인 개선 레버")
     w("")
 
     # ── 운영 가이드 ──
     w(f"  [운영 가이드]")
     w(f"    • 턴 제한: 실무 {PRODUCTION_CUTOFF}턴 이내 (현재 {best_pp:.0%}, 충분히 활용 가능)")
     w(f"    • T{PRODUCTION_CUTOFF} 이후 성능 하락은 스트레스 테스트 결과이며, 운영 목표 아님")
-    w(f"    • 개선 후 이 벤치마크 재실행 → Phase별 달성 여부 확인")
+    w(f"    • 개선 후 이 벤치마크 재실행 → 달성 여부 확인")
     w("")
     w("=" * 78)
 
@@ -1856,12 +1912,12 @@ def generate_report_md(
 
     # Top 에러
     tag_fixes = {
-        "WRONG_TOOL": "tool description 정제",
-        "MISSED_CALL": "프롬프트 보강",
-        "FALSE_CALL": "no-call 가이드 + few-shot",
-        "ARG_MISSING": "structured slot tracking",
-        "ARG_WRONG": "slot memory 도입",
-        "ARG_STALE": "번복 감지 프롬프트",
+        "WRONG_TOOL": "tool 선택 정확도 향상",
+        "MISSED_CALL": "호출 판단 기준 강화",
+        "FALSE_CALL": "No-Call 판별 정확도 향상",
+        "ARG_MISSING": "필수 인자 채움 보강",
+        "ARG_WRONG": "인자 값 정확도 향상",
+        "ARG_STALE": "대화 상태 추적 보강",
     }
     w("**모델별 Top 에러:**")
     w("")
@@ -1882,10 +1938,11 @@ def generate_report_md(
     best_model = max(usable, key=lambda m: prod_perf[m]) if usable else models[0]
     best_pp = prod_perf[best_model]
     best_safe = safe_turns.get(best_model, 0)
+    best_safe_str = f"~T{best_safe}" if best_safe > 0 else "T3 미만"
     w(f"- **권장 모델**: {_short(best_model)} (실무 {best_pp:.0%})")
     w(f"- **권장 턴 제한**: {PRODUCTION_CUTOFF}턴 이내")
-    w(f"- **85%+ 유지 구간**: ~T{best_safe}")
-    w(f"- 개선 후 벤치마크 재실행으로 Phase별 달성 확인")
+    w(f"- **85%+ 유지 구간**: {best_safe_str}")
+    w(f"- 개선 후 벤치마크 재실행으로 달성 여부 확인")
     w("")
 
     # 저장
