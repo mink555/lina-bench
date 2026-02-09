@@ -28,7 +28,7 @@ def deep_compare(model_val: Any, gt_val: Any) -> bool:
     - dict: GT의 모든 key가 model에 존재하고 값 일치
     - list[dict]: 순서 의존 (disclosed_conditions 등)
     - list[str/int]: 순서 무관 (coverage_interests 등)
-    - scalar: 직접 비교 (int 45 == float 45.0 허용)
+    - scalar: 직접 비교 (int 45 == float 45.0, "60000" == 60000 허용)
     """
     if isinstance(gt_val, dict) and isinstance(model_val, dict):
         return all(
@@ -53,9 +53,21 @@ def deep_compare(model_val: Any, gt_val: Any) -> bool:
             if not found:
                 return False
         return True
-    # scalar 비교 (int/float 호환)
+    # scalar 비교 — BFCL AST 매칭 기준
+    # 1) int/float 호환: 45 == 45.0
     if isinstance(gt_val, (int, float)) and isinstance(model_val, (int, float)):
         return abs(float(model_val) - float(gt_val)) < 1e-9
+    # 2) 문자열 ↔ 숫자 호환: "60000" == 60000 (BFCL type coercion)
+    if isinstance(gt_val, (int, float)) and isinstance(model_val, str):
+        try:
+            return abs(float(model_val) - float(gt_val)) < 1e-9
+        except (ValueError, OverflowError):
+            return False
+    if isinstance(gt_val, str) and isinstance(model_val, (int, float)):
+        try:
+            return abs(float(gt_val) - float(model_val)) < 1e-9
+        except (ValueError, OverflowError):
+            return False
     return model_val == gt_val
 
 
