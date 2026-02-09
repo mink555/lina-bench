@@ -1371,10 +1371,7 @@ def generate_report(
         # ST3 vs 다른 ST의 성능 비교
         st3_stronger = []
         for m in aggressive_models:
-            st_f = {}
-            for st in ("ST1", "ST2", "ST3"):
-                v = cumul_perf_st[m][st]
-                st_f[st] = v[max(v.keys())] if v else 0
+            st_f = cross[m]["st_perf"]
             if st_f["ST3"] >= max(st_f["ST1"], st_f["ST2"]):
                 st3_stronger.append(m)
 
@@ -1388,10 +1385,7 @@ def generate_report(
             w(f"      {'─' * 28} {'─' * 7} {'─' * 6} {'─' * 6} {'─' * 6} {'─' * 12}")
             for m in aggressive_models:
                 nc = sp[m]["nc_acc"]
-                st_f = {}
-                for st in ("ST1", "ST2", "ST3"):
-                    v = cumul_perf_st[m][st]
-                    st_f[st] = v[max(v.keys())] if v else 0
+                st_f = cross[m]["st_perf"]
                 is_best = "✓" if m in st3_stronger else ""
                 w(f"      {_short(m):<28} {nc:>6.0%} {st_f['ST1']:>5.0%}"
                   f" {st_f['ST2']:>5.0%} {st_f['ST3']:>5.0%} {is_best:>12}")
@@ -1403,10 +1397,7 @@ def generate_report(
                 w(f"      ─── 비교: 균형 모델 ───")
                 for m in balanced:
                     nc = sp[m]["nc_acc"]
-                    st_f = {}
-                    for st in ("ST1", "ST2", "ST3"):
-                        v = cumul_perf_st[m][st]
-                        st_f[st] = v[max(v.keys())] if v else 0
+                    st_f = cross[m]["st_perf"]
                     w(f"      {_short(m):<28} {nc:>6.0%} {st_f['ST1']:>5.0%}"
                       f" {st_f['ST2']:>5.0%} {st_f['ST3']:>5.0%}")
             w(f"      → tool 과잉 성향은 교란 내성에서 유리하나,")

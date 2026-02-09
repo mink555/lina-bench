@@ -24,7 +24,7 @@ python -m benchmark.compare_results # 리포트 + 차트 생성
 > - 답변 품질 1위: NL Quality 100%로 Agent+답변 겸용 가능
 > - H100 80GB 최적: 14B ~28GB FP16 서빙, 52GB 여유
 > - 성능 붕괴: ~T3까지 85%+ 유지, 이후 점진 하락
-> - 핵심 병목: No-Call 44%, Arg Acc 74% → 프롬프트 + 시스템 아키텍처로 개선
+> - 핵심 병목: No-Call 44%, Arg Acc 74% — [개선 방향](#5-성능-개선-방향) 참고
 
 <br>
 
@@ -222,7 +222,7 @@ LLM도 동일한 패턴을 보인다는 점이 [Lost in the Middle][lost-middle]
 | Tool Acc | 88% | |
 | Arg Acc | 74% | ⚠️ 병목 |
 | FC Judge | 94% | |
-| No-Call | 44% | ⚠️ 병목 |
+| No-Call | 44% | ⚠️ 병목 (FC 기반, 전체 nc_acc 33%) |
 | **Performance** | **79%** | |
 
 개선 우선순위: **No-Call 44%** > **Arg Acc 74%** > Tool Acc 88%
@@ -289,7 +289,7 @@ tool 과잉 성향은 교란 내성에서 유리하나, No-Call 정확도를 희
 | No-Call | 44% | +41%p | +1.4%p | +5.8%p | 1 |
 | Tool Acc | 88% | +10%p | +2.9%p | +3.0%p | 2 |
 
-**Arg Acc와 No-Call이 가장 효과적인 개선 레버임**.
+Perf 최대 효과 기준으로 **Arg Acc와 No-Call이 가장 큰 레버**임. 단, 확실성과 난이도를 고려한 실행 순서는 [5절](#5-성능-개선-방향) 참고.
 
 **3) H100 1대 환경에서의 최적 선택**
 
@@ -306,51 +306,127 @@ tool 과잉 성향은 교란 내성에서 유리하나, No-Call 정확도를 희
 
 ---
 
-## 5. 단기 성능 개선 방향
+## 5. 성능 개선 방향
 
-79%에서 더 올리려면 어떤 방법이 있는가? 리서치 기반으로 정리함.
-
-### 5.1 방법별 현실성 판단
+79%에서 더 올리려면? 쉽고 확실한 것부터 정리함.
 
 > [!NOTE]
-> 제약: H100 1대 (폐쇄망), 서빙+학습 동시 불가, 인력/리소스 제한
+> 제약: H100 1대 (폐쇄망), 서빙+학습 동시 불가 → **파인튜닝 제외**, 모델 앙상블 제외 (GPU 초과)
 
-| 방법 | 현실성 | 이유 |
-|------|--------|------|
-| **프롬프트 엔지니어링** | 가장 현실적 | 비용 없음, 가역적, 즉시 실험 가능 |
-| **시스템 아키텍처 개선** | 현실적 | 모델 수정 없이 주변 시스템으로 보강 |
-| 파인튜닝 (LoRA/RL) | 제외 | H100 1대로 서빙+학습 동시 불가, 범용 능력 저하 리스크 |
-| 모델 앙상블/라우팅 | 제외 | 2모델 운영은 GPU 메모리 초과 |
-| RAG (인수규정 주입) | 우선순위 낮음 | 현재 병목이 정보 부족이 아닌 tool calling 정확도 |
-
-결론: **프롬프트 엔지니어링부터 시작하고, 한계가 오면 시스템 아키텍처를 병행**하는 순서가 현실적임.
-
-### 5.2 프롬프트 엔지니어링
-
-현재 병목(No-Call 44%, Arg Acc 74%)에 대해 효과가 검증된 기법들:
-
-- **No-Call 가이드**: 시스템 프롬프트에 "필수 정보가 부족하면 tool 대신 질문하세요" + few-shot 추가. 가장 확실한 Quick Win
-- **Structured Slot Tracking**: 고객 정보를 JSON으로 누적 추적, tool 호출 시 해당 JSON에서 인자를 채워 넣도록 유도 → Arg Acc 개선
-- **Tool Description 정제**: 프롬프트와 tool 설명을 함께 최적화 ([ACL 2025][joint-opt])
+| 순위 | 기법 | 난이도 | Perf 효과 | 확실성 | 회귀 리스크 |
+|:---:|------|:---:|:---:|:---:|:---:|
+| 1 | [Parallel → Sequential 분리](#51-parallel--sequential-분리) | 코드만 | 소 | **확실** | 없음 |
+| 2 | [No-Call 프롬프트 가이드](#52-no-call-프롬프트-가이드) | 프롬프트 | **+5.8%p** | 불확실 | 있음 |
+| 3 | [Tool Description 정제](#53-tool-description-정제) | tool 설명 | 중 | 불확실 | 있음 |
+| 4 | [Slot Memory](#54-slot-memory--arg-acc-개선) | 프롬프트 or 코드 | **+5.9%p** | 중~높음 | 낮음~있음 |
+| 5 | [Tool Context 동적 관리](#55-tool-context-동적-관리) | 아키텍처 | 나중에 | - | 낮음 |
 
 > [!WARNING]
-> 프롬프트 수정 시 다른 능력이 저하될 수 있음 ([Tool-Induced Myopia][tim]).
-> 변경 전후 반드시 전체 벤치마크 재실행 → 회귀 방지.
+> 순위 2~3 및 4의 프롬프트 방식은 **효과가 보장되지 않으며**, 다른 능력을 저하시킬 수 있음 ([Tool-Induced Myopia][tim]).
+> 프롬프트 변경 전후 반드시 전체 벤치마크 재실행 → 회귀 검증 필요.
 
-### 5.3 시스템 아키텍처 개선
+### 5.1 Parallel → Sequential 분리
 
-프롬프트만으로 한계가 올 경우, 모델을 수정하지 않고 주변 시스템으로 정확도를 보강하는 방법들:
+현재 전 모델이 2개 tool 동시 호출에서 실패함 (최고 인식률 58%, Arg 37%).
+모델 능력이 아니라 요청 방식의 문제 → 시스템에서 1개씩 분리하면 Single 수준(Tool 87%, Arg 66%)으로 상승.
+모델을 건드리지 않으므로 회귀 리스크 0. 가장 쉽고 확실한 개선.
 
-| 기법 | 설명 | 개선 대상 |
-|------|------|----------|
-| Parallel → Sequential 분리 | 병렬 호출을 순차로 전환 ([LLMCompiler][llmcompiler]) | Parallel 58% → ~100% |
-| Slot Memory (외부 JSON) | 슬롯을 코드로 관리, tool 호출 시 주입 | Arg Acc 하락 방지 |
-| [MemTool][memtool] 패턴 | tool context 동적 관리 (불필요 context 제거) | 장기 대화 성능 유지 |
+<details>
+<summary>상세: 방법 / 효과 / 한계 / 근거</summary>
 
-특히 Slot Memory는 모델에게 인자 추출을 전부 맡기지 않고, 대화에서 추출한 정보를 별도 JSON으로 유지하여 코드 레벨에서 인자를 채워주는 방식임. 프롬프트만으로 Arg Acc가 안 오를 때 가장 효과적인 대안임.
+- **방법**: 시스템(오케스트레이션)에서 병렬 요청을 감지, 1개씩 순차로 모델에 전달
+- **효과**: Tool 67→87%, Arg 37→66% (본 벤치마크 Single 실측치)
+- **한계**: Parallel은 12/106턴(11%)이라 전체 Perf 기여 제한적. 지연 증가 (1→2회 호출)
+- **근거**: [LLMCompiler][llmcompiler] (ICML 2024) — 병렬 호출을 DAG로 분해 → 순차 실행으로 정확도 ~9%p 향상, 지연 3.7× 감소
 
-파인튜닝이 필요해지는 시점은 프롬프트 + 시스템 아키텍처로도 벽에 부딪힐 때임.
-그때는 [Anchored SFT][asft] + DPO 방식으로 범용 능력 저하를 최소화해야 함.
+</details>
+
+### 5.2 No-Call 프롬프트 가이드
+
+현재 qwen3-14b No-Call 미호출 정답 33% (12턴 중 4턴만 정답). 정보 부족/범위 밖인데 tool을 호출해버림 (FALSE_CALL 8건).
+시스템 프롬프트에 "정보 부족 시 tool 대신 질문하세요" + few-shot 추가.
+비용 0이지만 효과는 실험 필요.
+
+<details>
+<summary>상세: 근거 / 리스크</summary>
+
+- **근거**: [BFCL v2][bfcl]가 irrelevance detection을 별도 평가 카테고리로 분리한 이유 자체가, 모델이 이 판단을 못하기 때문. [ToolACE][toolace] (ICLR 2025)는 파인튜닝으로 irrelevance 83→90% 개선했으나 프롬프트만으로는 미검증
+- **리스크**: [Tool-Induced Myopia][tim] (2025) — tool 관련 프롬프트 강화 시 추론 능력 저하 실증. 벤치마크 재실행 필수
+
+</details>
+
+### 5.3 Tool Description 정제
+
+tool 설명과 프롬프트를 함께 최적화 → tool 선택/사용 여부 판단 정확도 향상.
+WRONG_TOOL 18건 + FALSE_CALL 8건이 대상. 5.2와 동시 실험 가능.
+
+<details>
+<summary>상세: 근거 / 리스크</summary>
+
+- **근거**: [PLAY2PROMPT][joint-opt] (ACL 2025) — tool과 직접 상호작용하여 tool instruction 자동 최적화, 라벨 데이터 없이 zero-shot 가능
+- **리스크**: 5.2와 동일. tool description 변경이 기존 정상 호출에 영향 가능
+
+</details>
+
+### 5.4 Slot Memory — Arg Acc 개선
+
+현재 Arg Acc 62% (실무 74%). ARG_WRONG 24건 + ARG_STALE 18건 = 42건.
+특히 고객 번복 후 이전 값 미갱신이 18건. 두 가지 접근이 있음:
+
+| | 프롬프트 방식 | 시스템(코드) 방식 |
+|---|---|---|
+| **개념** | 프롬프트에 "고객 정보를 JSON으로 정리한 뒤 tool 호출하라" 지시 | 별도 코드가 대화에서 슬롯을 추출·관리, tool 호출 시 인자를 코드로 주입 |
+| **난이도** | **낮음** — 프롬프트 수정만 | **중간** — 상태 관리 코드 개발 |
+| **상태 갱신** | 모델이 매 턴 JSON을 재생성 (번복 감지도 모델 의존) | 코드가 diff 비교로 갱신 (번복 감지를 로직으로 보장) |
+| **ARG_STALE 해결** | 모델이 번복을 인식해야 함 — 현재 18건 실패하는 바로 그 문제 | 코드가 관리하므로 **모델의 장기 기억 한계를 우회** |
+| **컨텍스트** | 매 턴 JSON이 추가되어 컨텍스트 증가 → [Lost in the Middle][lost-middle] 심화 | 모델 컨텍스트에 영향 없음 |
+| **회귀 리스크** | **있음** — 프롬프트 변경으로 다른 능력 저하 가능 | **낮음** — 모델 프롬프트 변경 없이 가능 |
+| **확실성** | 불확실 — 모델이 지시를 따를지 보장 없음 | 비교적 확실 — 상태 관리가 결정적(deterministic) |
+
+**결론**: 프롬프트 방식은 빠르게 시도할 수 있지만, 번복 미갱신(ARG_STALE)은 모델이 못 하는 것을 다시 모델에게 시키는 셈.
+시스템 방식이 공수는 크지만 병목의 근본 원인(모델의 상태 추적 실패)을 우회하므로 더 확실함.
+
+<details>
+<summary>상세: 근거 / 비교 연구</summary>
+
+**프롬프트 방식 근거**
+
+- [State-Update Prompting][state-update] (2025) — 대화 상태를 프롬프트에 명시적으로 재구성하는 전략. 단순 히스토리 연결 대비 **+14.1%** 성능 향상, 추론 시간 73.1% 감소, 토큰 59.4% 절감. "명시적 상태 관리가 기존 히스토리 연결보다 효율적"
+- 단, 모델이 상태를 정확히 재구성한다는 전제 — 번복/교란이 심한 경우 모델이 상태를 잘못 구성할 수 있음
+
+**시스템 방식 근거**
+
+- [HammerBench][hammerbench] (2024) — 외부 정보 개입 시 slot-filling 정확도 유의미 하락 (GPT-4o: 74→66%). 모델에게 slot 추적을 전부 맡기는 것 자체가 병목
+- [Zero-shot Slot Filling][zs-slot] (COLING 2025) — 경량 추출 모델(GLiNER) + LLM + 규칙 기반 제약을 조합한 파이프라인이 LLM 단독 대비 **+34%** 정확도 향상. 코드 레벨 제약(ITN, 사전 정의 규칙)이 핵심 기여
+
+**구조화 출력의 부작용**
+
+- [Tam et al. (2024)][json-degradation] — JSON 출력을 강제하면 추론 정확도가 **최대 −27%p** 하락. 프롬프트 방식에서 JSON 정리를 요구하면 이 부작용이 발생할 수 있음
+
+</details>
+
+### 5.5 Tool Context 동적 관리
+
+실무 7턴에서는 불필요. 향후 턴 제한을 늘릴 때 적용.
+
+<details>
+<summary>상세: 방법 / 근거</summary>
+
+- **방법**: [MemTool][memtool] (2025) — 불필요한 tool context를 동적 제거/교체하여 컨텍스트 포화 방지
+- **근거**: 13개 LLM, 100회 연속 대화에서 Workflow/Hybrid 모드가 tool 제거 효율 90-94% 달성
+
+</details>
+
+<details>
+<summary>제외 방법: 파인튜닝, 모델 앙상블, RAG</summary>
+
+| 방법 | 제외 이유 |
+|------|----------|
+| 파인튜닝 (LoRA/RL) | H100 1대로 서빙+학습 동시 불가. [RLHF/SIFT는 멀티턴 능력을 오히려 저하시킬 수 있음][mint]. 필요 시 [Anchored SFT][asft] + DPO로 범용 능력 저하 최소화 |
+| 모델 앙상블/라우팅 | 2모델 동시 운영은 GPU 메모리 초과 |
+| RAG (인수규정 주입) | 현재 병목이 정보 부족이 아닌 tool calling 정확도 |
+
+</details>
 
 <br>
 
@@ -574,7 +650,13 @@ python -m benchmark.compare_results         # 결과 비교 + 리포트
 - [Tool-Induced Myopia][tim] — 도구 사용이 추론 능력을 저하시키는 현상 (2025)
 - [LLMCompiler][llmcompiler] — Parallel Function Calling 컴파일러 (ICML 2024)
 - [MemTool][memtool] — 멀티턴 tool context 동적 관리 (2025)
-- [Joint Optimization][joint-opt] — 프롬프트 + Tool Description 동시 최적화 (ACL 2025)
+- [PLAY2PROMPT][joint-opt] — Zero-shot Tool Instruction 최적화 (ACL 2025)
+- [ToolACE][toolace] — LLM Function Calling 학습 데이터 생성 + irrelevance detection (ICLR 2025)
+- [HammerBench][hammerbench] — 모바일 환경 Function Calling 평가, External Information 영향 분석 (2024)
+- [State-Update Prompting][state-update] — 멀티턴 대화 상태 재구성 전략, +14.1% 성능 향상 (2025)
+- [Zero-shot Slot Filling][zs-slot] — GLiNER + LLM + 규칙 파이프라인, 단독 대비 +34% (COLING 2025)
+- [Tam et al.][json-degradation] — JSON 출력 강제 시 추론 정확도 최대 −27%p 하락 (2024)
+- [MINT][mint] — 멀티턴 상호작용 평가, RLHF/SIFT 멀티턴 저하 실증 (Wang et al., 2023)
 - [Anchored SFT][asft] — 파인튜닝 시 범용 능력 보존 (2024)
 
 <!-- Reference Links -->
@@ -591,5 +673,11 @@ python -m benchmark.compare_results         # 결과 비교 + 리포트
 [tim]: https://arxiv.org/abs/2511.10899
 [llmcompiler]: https://arxiv.org/abs/2312.04511
 [memtool]: https://arxiv.org/abs/2507.21428
-[joint-opt]: https://aclanthology.org/2025.findings-acl.1149/
+[joint-opt]: https://sls.csail.mit.edu/publications/2025/WFang_ACL_2025.pdf
+[toolace]: https://proceedings.iclr.cc/paper_files/paper/2025/file/663865ea167425c6c562cb0b6bcf76c7-Paper-Conference.pdf
+[hammerbench]: https://arxiv.org/abs/2412.16516
+[state-update]: https://arxiv.org/abs/2509.17766
+[zs-slot]: https://aclanthology.org/2025.coling-industry.59/
+[json-degradation]: https://arxiv.org/abs/2408.02442
+[mint]: https://arxiv.org/abs/2309.10691
 [asft]: https://arxiv.org/abs/2509.23753
