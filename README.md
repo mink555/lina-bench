@@ -46,7 +46,7 @@ python -m benchmark.compare_results # 리포트 + 차트 생성
 > 확실한 개선은 서비스 구축 시 Slot Memory(E)와 Parallel 순차 분리(D)로 달성함.
 > — [개선 방향 상세](#5-성능-개선-방향)
 
-**tool calling(77%)·한국어 답변 생성 종합 1위는 qwen3-14b.**
+🎯 **tool calling(77%)·한국어 답변 생성 종합 1위는 qwen3-14b.**
 **대화 5회차(T5)를 성능 붕괴의 임계점으로 식별했으며, 본 벤치에서 정의한 Perf를 종합적으로 개선하되 — Qwen 계열의 과잉 호출 경향(No-Call 33~44%)이 확인된 만큼, 금융권 오작동 리스크를 고려해 No-Call 정밀도를 최우선 과제로 설정함.**
 
 <br>
