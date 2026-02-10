@@ -50,7 +50,7 @@ python -m benchmark.compare_results # 리포트 + 차트 생성
 **대화 5회차(T5)에서 성능 붕괴가 시작되며, Qwen 계열의 과잉 호출 경향이 금융권 오작동 리스크로 직결되므로 No-Call 정밀도를 최우선으로 개선함.**
 
 - **qwen3-next-80b 탈락** — 성능 1위(78%)이나 MoE(80B/3B active) 구조라 FP16 160GB, 양자화 필수. 폐쇄망에서 expert routing 레이턴시 편차·서빙 안정성 리스크가 큼.
-- **qwen3-32b 탈락** — NL Quality 1위(60% vs 14b 36%)이나, VRAM 2배(~64GB)를 쓰면서 실무 Perf는 오히려 1%p 낮음(76% vs 77%). NL 지표는 MISSED_CALL과 구조적으로 엮여 런별 편차가 크므로(13~60%) 현 시점에서 신뢰하기 어려우며, 14b의 No-Call을 개선하면 NL도 함께 오를 가능성이 높음.
+- **qwen3-32b 탈락** — NL Quality 1위(60% vs 14b 36%)이나, VRAM 2배(\~64GB)를 쓰면서 실무 Perf는 오히려 1%p 낮음(76% vs 77%). NL 지표는 MISSED\_CALL과 구조적으로 엮여 런별 편차가 크므로(13\~60%) 현 시점에서 신뢰하기 어려우며, 14b의 No-Call을 개선하면 NL도 함께 오를 가능성이 높음.
 
 <br>
 
