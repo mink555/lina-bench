@@ -215,11 +215,11 @@ def evaluate_bfcl_parallel(
             else:
                 mk = set(model_args.keys())
                 key_accs.append(len(gt_keys & mk) / len(gt_keys))
-                key_accs_val = sum(
+                val_hits = sum(
                     1 for k in gt_keys
                     if k in model_args and deep_compare(model_args[k], gt_args[k])
                 )
-                val_accs.append(key_accs_val / len(gt_keys))
+                val_accs.append(val_hits / len(gt_keys))
         else:
             key_accs.append(0.0)
             val_accs.append(0.0)

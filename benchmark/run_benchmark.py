@@ -1328,21 +1328,6 @@ def print_turnpoint_analysis(all_results: dict):
     print()
 
 
-def _turn_performance_static(turn_result: dict) -> float:
-    """턴 하나의 Performance (save_results용 정적 헬퍼).
-
-    tool_call 턴: (Tool + Arg + FC) / 3
-    no_call 턴:   FC Judge만
-    """
-    fcj_vals = list(turn_result["fc_judgment"].values())
-    fc = sum(fcj_vals) / len(fcj_vals) if fcj_vals else 0
-    if turn_result.get("call_type", "single") == "no_call":
-        return fc
-    tool = turn_result["bfcl"]["tool_name_acc"]
-    arg = turn_result["bfcl"]["arg_value_acc"]
-    return (tool + arg + fc) / 3
-
-
 def save_results(
     all_results: dict,
     summary: dict,
@@ -1453,7 +1438,7 @@ def save_results(
 
                 # per-scenario Performance 계산
                 sc_turns = all_results[model].get(sc_id, [])
-                perf_vals = [_turn_performance_static(t) for t in sc_turns]
+                perf_vals = [_turn_performance(t) for t in sc_turns]
                 perf = sum(perf_vals) / len(perf_vals) if perf_vals else 0
 
                 writer.writerow([

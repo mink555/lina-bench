@@ -1,5 +1,5 @@
 {
-  "_comment": "3회 평균용 — seed=44 (Run 4/3)",
+  "_comment": "3회 평균용 — seed=44 (Run 3/3)",
 
   "models": [
     "meta-llama/llama-3.3-70b-instruct",
