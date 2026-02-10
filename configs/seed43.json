@@ -1,0 +1,31 @@
+{
+  "_comment": "3회 평균용 — seed=43 (Run 3/3)",
+
+  "models": [
+    "meta-llama/llama-3.3-70b-instruct",
+    "mistralai/mistral-small-3.2-24b-instruct",
+    "qwen/qwen3-32b",
+    "qwen/qwen3-14b",
+    "qwen/qwen3-next-80b-a3b-instruct"
+  ],
+
+  "judge_model": "openai/gpt-4o",
+
+  "generation": {
+    "temperature": 0.0,
+    "seed": 43,
+    "tool_choice": "auto"
+  },
+
+  "judge": {
+    "temperature": 0.0,
+    "seed": 43,
+    "max_tokens": 200
+  },
+
+  "retry": {
+    "max_retries": 3,
+    "retry_delay": 2.0,
+    "call_delay": 1.0
+  }
+}
